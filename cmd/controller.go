@@ -49,3 +49,33 @@ func init() {
 	// is called directly, e.g.:
 	// controllerCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
+
+var controllerTemplate = `
+package {{.Package}}
+
+type {{.Name}} struct {}
+
+func (c *{{.Name}}) Index() int {
+  	return c.list.Len()
+}
+
+func (c *{{.Name}}) Get() int {
+	return c.list.Len()
+}
+
+func (c *{{.Name}}) Create() int {
+	return c.list.Len()
+}
+
+func (c *{{.Name}}) Edit() int {
+	return c.list.Len()
+}
+
+func (c *{{.Name}}) Update() int {
+	return c.list.Len()
+}
+
+func (c *{{.Name}}) Delete() int {
+	return c.list.Len()
+}
+`
