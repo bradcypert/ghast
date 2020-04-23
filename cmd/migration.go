@@ -19,6 +19,9 @@ var migrationCmd = &cobra.Command{
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
+		if pkg == "" {
+			pkg = "migrations"
+		}
 		options := factoryOptions{
 			pkg,
 			name,
@@ -37,7 +40,6 @@ var migrationCmd = &cobra.Command{
 
 func init() {
 	makeCmd.AddCommand(migrationCmd)
-	controllerCmd.Flags().StringVarP(&pkg, "package", "p", "models", "Package name")
 
 	// Here you will define your flags and configuration settings.
 
@@ -49,3 +51,7 @@ func init() {
 	// is called directly, e.g.:
 	// migrationCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
+
+var migrationTemplate = `
+// TODO
+`

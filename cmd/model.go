@@ -2,12 +2,16 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"text/template"
 
 	"github.com/spf13/cobra"
 )
 
-var pkg string
-var name string
+type modelOptions struct {
+	Package string
+	Name    string
+}
 
 // modelCmd represents the model command
 var modelCmd = &cobra.Command{
@@ -18,26 +22,31 @@ var modelCmd = &cobra.Command{
 	Models leverage GORM and are used to structure the data that you're
 	working with in a way that makes sense to your application's needs.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("model called")
+		name := args[0]
+		if pkg == "" {
+			pkg = "models"
+		}
+		options := modelOptions{
+			pkg,
+			name,
+		}
+
+		t := template.Must(template.New("model").Parse(modelTemplate))
+		os.Mkdir(pkg, 0777)
+		f, err := os.Create(fmt.Sprintf("./%s/%s.go", pkg, name))
+		if err != nil {
+			panic("Unable to create model")
+		}
+		t.Execute(f, options)
+		f.Close()
 	},
 }
 
 func init() {
 	makeCmd.AddCommand(modelCmd)
-	controllerCmd.Flags().StringVarP(&pkg, "package", "p", "factories", "Package name")
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// modelCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// modelCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-var factoryTemplate = `
+var modelTemplate = `
 package {{.Package}}
 
 import (

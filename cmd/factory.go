@@ -13,9 +13,6 @@ type factoryOptions struct {
 	Name    string
 }
 
-var pkg string
-var name string
-
 // factoryCmd represents the factory command
 var factoryCmd = &cobra.Command{
 	Use:   "factory",
@@ -28,6 +25,9 @@ var factoryCmd = &cobra.Command{
 	although there are also reasons that you may want to use one in production.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
+		if pkg == "" {
+			pkg = "factories"
+		}
 		options := factoryOptions{
 			pkg,
 			name,
@@ -46,7 +46,6 @@ var factoryCmd = &cobra.Command{
 
 func init() {
 	makeCmd.AddCommand(factoryCmd)
-	controllerCmd.Flags().StringVarP(&pkg, "package", "p", "factories", "Package name")
 
 	// Here you will define your flags and configuration settings.
 

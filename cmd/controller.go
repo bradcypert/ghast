@@ -13,9 +13,6 @@ type controllerOptions struct {
 	Name    string
 }
 
-var pkg string
-var name string
-
 // controllerCmd represents the controller command
 var controllerCmd = &cobra.Command{
 	Use:   "controller",
@@ -27,6 +24,9 @@ Create a new controller. Controllers are used to handle your application specifi
 and are delegated to by your router.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
+		if pkg == "" {
+			pkg = "controllers"
+		}
 		options := controllerOptions{
 			pkg,
 			name,
@@ -45,7 +45,6 @@ and are delegated to by your router.`,
 
 func init() {
 	makeCmd.AddCommand(controllerCmd)
-	controllerCmd.Flags().StringVarP(&pkg, "package", "p", "controllers", "Package name")
 }
 
 var controllerTemplate = `
