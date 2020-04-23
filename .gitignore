@@ -20,3 +20,4 @@ controllers/
 models/
 factories/
 migrations/
+db/

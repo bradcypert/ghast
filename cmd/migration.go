@@ -1,22 +1,9 @@
-/*
-Copyright © 2020 NAME HERE <EMAIL ADDRESS>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
 package cmd
 
 import (
 	"fmt"
+	"os"
+	"text/template"
 
 	"github.com/spf13/cobra"
 )
@@ -24,20 +11,33 @@ import (
 // migrationCmd represents the migration command
 var migrationCmd = &cobra.Command{
 	Use:   "migration",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Create a new database migration",
+	Long: `Create a new database migration.
+	
+	Database migrations help manage your application's schema
+	and it's changes over time. Migrations are written in Go and use GORM (ideally).
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("migration called")
+		name := args[0]
+		options := factoryOptions{
+			pkg,
+			name,
+		}
+
+		t := template.Must(template.New("migration").Parse(migrationTemplate))
+		os.Mkdir(pkg, 0777)
+		f, err := os.Create(fmt.Sprintf("./%s/%s.go", pkg, name))
+		if err != nil {
+			panic("Unable to create model")
+		}
+		t.Execute(f, options)
+		f.Close()
 	},
 }
 
 func init() {
 	makeCmd.AddCommand(migrationCmd)
+	controllerCmd.Flags().StringVarP(&pkg, "package", "p", "models", "Package name")
 
 	// Here you will define your flags and configuration settings.
 

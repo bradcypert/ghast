@@ -20,13 +20,11 @@ var name string
 var controllerCmd = &cobra.Command{
 	Use:   "controller",
 	Args:  cobra.MinimumNArgs(1),
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Create a controller",
+	Long: `Create a controller
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Create a new controller. Controllers are used to handle your application specific logic
+and are delegated to by your router.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
 		options := controllerOptions{
@@ -35,8 +33,8 @@ to quickly create a Cobra application.`,
 		}
 
 		t := template.Must(template.New("controller").Parse(controllerTemplate))
-		os.Mkdir("controllers", 0777)
-		f, err := os.Create(fmt.Sprintf("./controllers/%s.go", name))
+		os.Mkdir(pkg, 0777)
+		f, err := os.Create(fmt.Sprintf("./%s/%s.go", pkg, name))
 		if err != nil {
 			panic("Unable to create controller")
 		}

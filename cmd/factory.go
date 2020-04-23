@@ -1,43 +1,52 @@
-/*
-Copyright © 2020 NAME HERE <EMAIL ADDRESS>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
 package cmd
 
 import (
 	"fmt"
+	"os"
+	"text/template"
 
 	"github.com/spf13/cobra"
 )
 
+type factoryOptions struct {
+	Package string
+	Name    string
+}
+
+var pkg string
+var name string
+
 // factoryCmd represents the factory command
 var factoryCmd = &cobra.Command{
 	Use:   "factory",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Args:  cobra.MinimumNArgs(1),
+	Short: "Create a new factory",
+	Long: `Create a new factory.
+	
+	Factories are used for generating data for your application.
+	They are particularly useful during local development and testing,
+	although there are also reasons that you may want to use one in production.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("factory called")
+		name := args[0]
+		options := factoryOptions{
+			pkg,
+			name,
+		}
+
+		t := template.Must(template.New("factory").Parse(factoryTemplate))
+		os.Mkdir(pkg, 0777)
+		f, err := os.Create(fmt.Sprintf("./%s/%s.go", pkg, name))
+		if err != nil {
+			panic("Unable to create factory")
+		}
+		t.Execute(f, options)
+		f.Close()
 	},
 }
 
 func init() {
 	makeCmd.AddCommand(factoryCmd)
+	controllerCmd.Flags().StringVarP(&pkg, "package", "p", "factories", "Package name")
 
 	// Here you will define your flags and configuration settings.
 
@@ -49,3 +58,13 @@ func init() {
 	// is called directly, e.g.:
 	// factoryCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
+
+var factoryTemplate = `
+package {{.Package}}
+
+type {{.Name}} struct {}
+
+func (c *{{.Name}}) Create() int {
+  	return c.list.Len()
+}
+`

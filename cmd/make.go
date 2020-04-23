@@ -9,13 +9,8 @@ import (
 // makeCmd represents the make command
 var makeCmd = &cobra.Command{
 	Use:   "make",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "This command help you make components for your web application.",
+	Long:  `This command help you make components for your web application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("make called")
 	},

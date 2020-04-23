@@ -6,16 +6,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var pkg string
+var name string
+
 // modelCmd represents the model command
 var modelCmd = &cobra.Command{
 	Use:   "model",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "create a new model",
+	Long: `Create a new model for your ghast project.
+	
+	Models leverage GORM and are used to structure the data that you're
+	working with in a way that makes sense to your application's needs.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("model called")
 	},
@@ -23,6 +24,7 @@ to quickly create a Cobra application.`,
 
 func init() {
 	makeCmd.AddCommand(modelCmd)
+	controllerCmd.Flags().StringVarP(&pkg, "package", "p", "factories", "Package name")
 
 	// Here you will define your flags and configuration settings.
 
@@ -34,3 +36,15 @@ func init() {
 	// is called directly, e.g.:
 	// modelCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
+
+var factoryTemplate = `
+package {{.Package}}
+
+import (
+	"github.com/jinzhu/gorm"
+)
+
+type {{.Name}} struct {
+	gorm.Model
+}
+`
