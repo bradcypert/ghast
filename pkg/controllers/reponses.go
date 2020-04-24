@@ -9,22 +9,22 @@ import (
 // and provides helper functions for working with the responseWriter
 type GhastController struct{}
 
-func (g GhastController) success(w http.ResponseWriter, text interface{}) {
+func (g GhastController) Success(w http.ResponseWriter, text interface{}) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, text)
 }
 
-func (g GhastController) notFound(w http.ResponseWriter, text interface{}) {
+func (g GhastController) NotFound(w http.ResponseWriter, text interface{}) {
 	w.WriteHeader(http.StatusNotFound)
 	fmt.Fprint(w, text)
 }
 
-func (g GhastController) badRequest(w http.ResponseWriter, text interface{}) {
+func (g GhastController) BadRequest(w http.ResponseWriter, text interface{}) {
 	w.WriteHeader(http.StatusBadRequest)
 	fmt.Fprint(w, text)
 }
 
-func (g GhastController) unauthorized(w http.ResponseWriter, text interface{}) {
+func (g GhastController) Unauthorized(w http.ResponseWriter, text interface{}) {
 	w.WriteHeader(http.StatusUnauthorized)
 	fmt.Fprint(w, text)
 }

@@ -55,30 +55,30 @@ import (
 )
 
 type {{.Name}} struct {
-	ghastController.Controller
+	ghastController.ghastController
 }
 
 func (c *{{.Name}}) Index(w http.ResponseWriter, r *http.Request) {
-  	c.notFound(w, "")
+  	c.NotFound(w, "")
 }
 
 func (c *{{.Name}}) Get(w http.ResponseWriter, r *http.Request) {
-	c.notFound(w, "")
+	c.NotFound(w, "")
 }
 
 func (c *{{.Name}}) Create(w http.ResponseWriter, r *http.Request) {
-	c.notFound(w, "")
+	c.NotFound(w, "")
 }
 
 func (c *{{.Name}}) Edit(w http.ResponseWriter, r *http.Request) {
-	c.notFound(w, "")
+	c.NotFound(w, "")
 }
 
 func (c *{{.Name}}) Update(w http.ResponseWriter, r *http.Request) {
-	c.notFound(w, "")
+	c.NotFound(w, "")
 }
 
 func (c *{{.Name}}) Delete(w http.ResponseWriter, r *http.Request) {
-	c.notFound(w, "")
+	c.NotFound(w, "")
 }
 `
