@@ -11,20 +11,20 @@ type GhastController struct{}
 
 func (g GhastController) success(w http.ResponseWriter, text interface{}) {
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(w, "Test")
+	fmt.Fprint(w, text)
 }
 
 func (g GhastController) notFound(w http.ResponseWriter, text interface{}) {
 	w.WriteHeader(http.StatusNotFound)
-	fmt.Fprint(w, "Test")
+	fmt.Fprint(w, text)
 }
 
 func (g GhastController) badRequest(w http.ResponseWriter, text interface{}) {
 	w.WriteHeader(http.StatusBadRequest)
-	fmt.Fprint(w, "Test")
+	fmt.Fprint(w, text)
 }
 
-func (g GhastController) badRequest(w http.ResponseWriter, text interface{}) {
-	w.WriteHeader(http.StatusBadRequest)
-	fmt.Fprint(w, "Test")
+func (g GhastController) unauthorized(w http.ResponseWriter, text interface{}) {
+	w.WriteHeader(http.StatusUnauthorized)
+	fmt.Fprint(w, text)
 }
