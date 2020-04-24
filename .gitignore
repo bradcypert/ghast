@@ -16,8 +16,8 @@
 
 main
 
-controllers/
-models/
-factories/
-migrations/
-db/
+/controllers/
+/models/
+/factories/
+/migrations/
+/db/
