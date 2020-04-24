@@ -50,29 +50,35 @@ func init() {
 var controllerTemplate = `
 package {{.Package}}
 
-type {{.Name}} struct {}
+import (
+	ghastController "github.com/bradcypert/ghast/pkg/controllers"
+)
 
-func (c *{{.Name}}) Index() int {
-  	return c.list.Len()
+type {{.Name}} struct {
+	ghastController.Controller
 }
 
-func (c *{{.Name}}) Get() int {
-	return c.list.Len()
+func (c *{{.Name}}) Index(w http.ResponseWriter, r *http.Request) {
+  	c.notFound(w, "")
 }
 
-func (c *{{.Name}}) Create() int {
-	return c.list.Len()
+func (c *{{.Name}}) Get(w http.ResponseWriter, r *http.Request) {
+	c.notFound(w, "")
 }
 
-func (c *{{.Name}}) Edit() int {
-	return c.list.Len()
+func (c *{{.Name}}) Create(w http.ResponseWriter, r *http.Request) {
+	c.notFound(w, "")
 }
 
-func (c *{{.Name}}) Update() int {
-	return c.list.Len()
+func (c *{{.Name}}) Edit(w http.ResponseWriter, r *http.Request) {
+	c.notFound(w, "")
 }
 
-func (c *{{.Name}}) Delete() int {
-	return c.list.Len()
+func (c *{{.Name}}) Update(w http.ResponseWriter, r *http.Request) {
+	c.notFound(w, "")
+}
+
+func (c *{{.Name}}) Delete(w http.ResponseWriter, r *http.Request) {
+	c.notFound(w, "")
 }
 `
