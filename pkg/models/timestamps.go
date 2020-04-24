@@ -6,5 +6,5 @@ import "time"
 type Timestamps struct {
 	CreatedAt *time.Time
 	DeletedAt *time.Time
-	UpdatedAt *time.Tim
+	UpdatedAt *time.Time
 }
