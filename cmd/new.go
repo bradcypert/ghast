@@ -25,7 +25,7 @@ var newCmd = &cobra.Command{
 		t.Execute(f, nil)
 		f.Close()
 
-		fmt.Sprintln("Successfully create a new Ghast project in ./%s", projectName)
+		fmt.Sprintf("Successfully create a new Ghast project in ./%s", projectName)
 	},
 }
 

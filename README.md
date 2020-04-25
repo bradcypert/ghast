@@ -1,5 +1,7 @@
 # ghast
 
+[![Build Status](https://travis-ci.org/bradcypert/ghast.svg?branch=master)](https://travis-ci.org/bradcypert/ghast)
+
 Ghast is an "All in one" toolkit for building reliable Go web applications.
 
 Whether you're building an API, website, or something a little more exotic (still over HTTP/HTTPS protocols)
