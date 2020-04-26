@@ -1,6 +1,7 @@
 package router
 
 import (
+	"context"
 	"net/http"
 	"time"
 
@@ -67,13 +68,16 @@ func (r Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 		match, _ := regexp.FindStringMatch(req.URL.String())
 
-		// for _, g := range match.Groups() {
-		// 	fmt.Printf("%q ", g.String())
-		// }
-		// fmt.Printf("%d %q\n", match.Index, match)
-
 		if match != nil {
-			binding.handler(rw, req)
+			ctx := req.Context()
+			for _, g := range match.Groups() {
+				key := tokens[match.Index].Name
+				value := g.String()
+				ctx = context.WithValue(ctx, key, value)
+			}
+			r := req.WithContext(ctx)
+			binding.handler(rw, r)
+			break
 		}
 	}
 }

@@ -51,6 +51,12 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprint(w, "Hello from Ghast!")
 	})
+
+	router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, "Hello "+r.Context().Value("name").(string))
+	})
+	
 	s := router.DefaultServer()
 	log.Fatal(s.ListenAndServe())
 }
