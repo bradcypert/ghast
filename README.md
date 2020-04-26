@@ -20,4 +20,16 @@ Still here? Great! You can install Ghast's CLI by running:
 go get github.com/bradcypert/ghast
 ```
 
+### Create a new Ghast project
+
+```
+ghast new MyProject
+```
+
+### Create a new Controller
+
+```
+ghast make controller UsersController
+```
+
 More documentation coming soon!
