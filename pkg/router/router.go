@@ -32,6 +32,13 @@ type Router struct {
 	middlewares []MiddlewareFunc
 }
 
+// AddMiddleware registers a new global middleware within the router
+// global middlewares will be called on any route that matches a route binding
+func (r *Router) AddMiddleware(fn []MiddlewareFunc) *Router {
+	r.middlewares = append(r.middlewares, fn...)
+	return r
+}
+
 // ServeHTTP allows the router to adhere to the handler func requirements
 // Delegates requests to provided routes
 func (r Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
@@ -87,9 +94,11 @@ func (r Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 			ctx := req.Context()
 			for _, g := range match.Groups() {
-				key := tokens[match.Index].Name
-				value := g.String()
-				ctx = context.WithValue(ctx, key, value)
+				if len(tokens) >= match.Index && len(tokens) > 0 {
+					key := tokens[match.Index].Name
+					value := g.String()
+					ctx = context.WithValue(ctx, key, value)
+				}
 			}
 			r := req.WithContext(ctx)
 			binding.handler(rw, r)
