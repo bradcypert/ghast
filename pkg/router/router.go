@@ -8,23 +8,28 @@ import (
 	pathToRegexp "github.com/soongo/path-to-regexp"
 )
 
+// MiddlewareFunc is a functional alias to signify the signature of a middleware anonymous function.
+type MiddlewareFunc = func(*http.ResponseWriter, *http.Request)
+
 // Binding maps a url pattern to an HTTP handler
 type Binding struct {
-	match   string
-	handler func(http.ResponseWriter, *http.Request)
+	match       string
+	handler     func(http.ResponseWriter, *http.Request)
+	middlewares []MiddlewareFunc
 }
 
 // Router struct models our routes to match off of and their behavior
 type Router struct {
-	gets     []Binding
-	posts    []Binding
-	patches  []Binding
-	puts     []Binding
-	deletes  []Binding
-	options  []Binding
-	heads    []Binding
-	connects []Binding
-	traces   []Binding
+	gets        []Binding
+	posts       []Binding
+	patches     []Binding
+	puts        []Binding
+	deletes     []Binding
+	options     []Binding
+	heads       []Binding
+	connects    []Binding
+	traces      []Binding
+	middlewares []MiddlewareFunc
 }
 
 // ServeHTTP allows the router to adhere to the handler func requirements
@@ -69,6 +74,17 @@ func (r Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		match, _ := regexp.FindStringMatch(req.URL.String())
 
 		if match != nil {
+
+			// Run global middlewares
+			for _, m := range r.middlewares {
+				m(&rw, req)
+			}
+
+			// Run route specific middlewares
+			for _, m := range binding.middlewares {
+				m(&rw, req)
+			}
+
 			ctx := req.Context()
 			for _, g := range match.Groups() {
 				key := tokens[match.Index].Name
@@ -89,10 +105,24 @@ func (r *Router) Get(route string, f func(http.ResponseWriter,
 	return r
 }
 
+// GetM registers a new GET route with the router and wires up the given middleware for that route only
+func (r *Router) GetM(route string, f func(http.ResponseWriter,
+	*http.Request), middleware []MiddlewareFunc) *Router {
+	r.gets = append(r.gets, Binding{match: route, handler: f, middlewares: middleware})
+	return r
+}
+
 // Post registers a new POST route with the router
 func (r *Router) Post(route string, f func(http.ResponseWriter,
 	*http.Request)) *Router {
 	r.posts = append(r.posts, Binding{match: route, handler: f})
+	return r
+}
+
+// PostM registers a new POST route with the router and wires up the given middleware for that route only
+func (r *Router) PostM(route string, f func(http.ResponseWriter,
+	*http.Request), middleware []MiddlewareFunc) *Router {
+	r.posts = append(r.posts, Binding{match: route, handler: f, middlewares: middleware})
 	return r
 }
 
@@ -103,10 +133,24 @@ func (r *Router) Put(route string, f func(http.ResponseWriter,
 	return r
 }
 
+// PutM registers a new PUT route with the router and wires up the given middleware for that route only
+func (r *Router) PutM(route string, f func(http.ResponseWriter,
+	*http.Request), middleware []MiddlewareFunc) *Router {
+	r.puts = append(r.puts, Binding{match: route, handler: f, middlewares: middleware})
+	return r
+}
+
 // Patch registers a new PATCH route with the router
 func (r *Router) Patch(route string, f func(http.ResponseWriter,
 	*http.Request)) *Router {
 	r.patches = append(r.patches, Binding{match: route, handler: f})
+	return r
+}
+
+// PatchM registers a new PATCH route with the router and wires up the given middleware for that route only
+func (r *Router) PatchM(route string, f func(http.ResponseWriter,
+	*http.Request), middleware []MiddlewareFunc) *Router {
+	r.patches = append(r.patches, Binding{match: route, handler: f, middlewares: middleware})
 	return r
 }
 
@@ -117,10 +161,24 @@ func (r *Router) Delete(route string, f func(http.ResponseWriter,
 	return r
 }
 
+// DeleteM registers a new DELETE route with the router and wires up the given middleware for that route only
+func (r *Router) DeleteM(route string, f func(http.ResponseWriter,
+	*http.Request), middleware []MiddlewareFunc) *Router {
+	r.deletes = append(r.deletes, Binding{match: route, handler: f, middlewares: middleware})
+	return r
+}
+
 // Options registers a new OPTIONS route with the router
 func (r *Router) Options(route string, f func(http.ResponseWriter,
 	*http.Request)) *Router {
 	r.options = append(r.options, Binding{match: route, handler: f})
+	return r
+}
+
+// OptionsM registers a new OPTIONS route with the router and wires up the given middleware for that route only
+func (r *Router) OptionsM(route string, f func(http.ResponseWriter,
+	*http.Request), middleware []MiddlewareFunc) *Router {
+	r.options = append(r.options, Binding{match: route, handler: f, middlewares: middleware})
 	return r
 }
 
@@ -131,10 +189,24 @@ func (r *Router) Head(route string, f func(http.ResponseWriter,
 	return r
 }
 
+// HeadM registers a new HEAD route with the router and wires up the given middleware for that route only
+func (r *Router) HeadM(route string, f func(http.ResponseWriter,
+	*http.Request), middleware []MiddlewareFunc) *Router {
+	r.heads = append(r.heads, Binding{match: route, handler: f, middlewares: middleware})
+	return r
+}
+
 // Trace registers a new TRACE route with the router
 func (r *Router) Trace(route string, f func(http.ResponseWriter,
 	*http.Request)) *Router {
 	r.traces = append(r.traces, Binding{match: route, handler: f})
+	return r
+}
+
+// TraceM registers a new TRACE route with the router and wires up the given middleware for that route only
+func (r *Router) TraceM(route string, f func(http.ResponseWriter,
+	*http.Request), middleware []MiddlewareFunc) *Router {
+	r.traces = append(r.traces, Binding{match: route, handler: f, middlewares: middleware})
 	return r
 }
 
