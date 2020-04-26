@@ -1,9 +1,10 @@
 package router
 
 import (
-	"fmt"
 	"net/http"
 	"time"
+
+	pathToRegexp "github.com/soongo/path-to-regexp"
 )
 
 // Binding maps a url pattern to an HTTP handler
@@ -61,9 +62,17 @@ func (r Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	for _, binding := range bindings {
-		fmt.Println(binding.match)
-		// TODO: Actual matching
-		if req.URL.String() == binding.match {
+		var tokens []pathToRegexp.Token
+		regexp := pathToRegexp.Must(pathToRegexp.PathToRegexp(binding.match, &tokens, nil))
+
+		match, _ := regexp.FindStringMatch(req.URL.String())
+
+		// for _, g := range match.Groups() {
+		// 	fmt.Printf("%q ", g.String())
+		// }
+		// fmt.Printf("%d %q\n", match.Index, match)
+
+		if match != nil {
 			binding.handler(rw, req)
 		}
 	}
