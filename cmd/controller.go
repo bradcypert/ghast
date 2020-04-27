@@ -51,11 +51,12 @@ var controllerTemplate = `
 package {{.Package}}
 
 import (
+	"net/http"
 	ghastController "github.com/bradcypert/ghast/pkg/controllers"
 )
 
 type {{.Name}} struct {
-	ghastController.ghastController
+	ghastController.GhastController
 }
 
 func (c *{{.Name}}) Index(w http.ResponseWriter, r *http.Request) {
