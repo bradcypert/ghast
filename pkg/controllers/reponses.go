@@ -18,7 +18,7 @@ func writeOut(w http.ResponseWriter, output interface{}) error {
 	} else {
 		json, err := json.Marshal(output)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			(w).WriteHeader(http.StatusInternalServerError)
 			return err
 		}
 
@@ -31,42 +31,36 @@ func writeOut(w http.ResponseWriter, output interface{}) error {
 
 // Success helper for writing out a 200 status and any fmt.Fprint-able interface.
 func (g GhastController) Success(w http.ResponseWriter, text interface{}) {
-	if writeOut(w, text) != nil {
-		w.WriteHeader(http.StatusOK)
-	}
+	w.WriteHeader(http.StatusOK)
+	writeOut(w, text)
 }
 
 // NotFound helper for writing out a 404 status and any fmt.Fprint-able interface.
 func (g GhastController) NotFound(w http.ResponseWriter, text interface{}) {
-	if writeOut(w, text) != nil {
-		w.WriteHeader(http.StatusNotFound)
-	}
+	(w).WriteHeader(http.StatusNotFound)
+	writeOut(w, text)
 }
 
 // BadRequest helper for writing out a 400 status and any fmt.Fprint-able interface.
 func (g GhastController) BadRequest(w http.ResponseWriter, text interface{}) {
-	if writeOut(w, text) != nil {
-		w.WriteHeader(http.StatusBadRequest)
-	}
+	w.WriteHeader(http.StatusBadRequest)
+	writeOut(w, text)
 }
 
 // Unauthorized helper for writing out a 401 status and any fmt.Fprint-able interface.
 func (g GhastController) Unauthorized(w http.ResponseWriter, text interface{}) {
-	if writeOut(w, text) != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-	}
+	w.WriteHeader(http.StatusUnauthorized)
+	writeOut(w, text)
 }
 
 // Forbidden helper for writing out a 403 status and any fmt.Fprint-able interface.
 func (g GhastController) Forbidden(w http.ResponseWriter, text interface{}) {
-	if writeOut(w, text) != nil {
-		w.WriteHeader(http.StatusForbidden)
-	}
+	w.WriteHeader(http.StatusForbidden)
+	writeOut(w, text)
 }
 
 // InternalServerError helper for writing out a 500 status and any fmt.Fprint-able interface.
 func (g GhastController) InternalServerError(w http.ResponseWriter, text interface{}) {
-	if writeOut(w, text) != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-	}
+	w.WriteHeader(http.StatusInternalServerError)
+	writeOut(w, text)
 }
