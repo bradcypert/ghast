@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -61,8 +60,6 @@ func TestResponses(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
 		resp := httptest.NewRecorder()
 		test.Test(resp, req)
-
-		fmt.Println(resp.Result().StatusCode)
 
 		if code := resp.Result().StatusCode; code != test.Status {
 			t.Errorf("%s - Failed to set correct status code: %d", test.Name, code)
