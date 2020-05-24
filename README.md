@@ -155,7 +155,7 @@ package container
 
 import (
 	"testing"
-	ghastContainer "github.com/bradcypert/ghast/pkg/controllers"
+	ghastContainer "github.com/bradcypert/ghast/pkg/container"
 )
 
 type Foo interface {
