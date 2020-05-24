@@ -33,9 +33,9 @@ var name string
 var rootCmd = &cobra.Command{
 	Use:   "ghast",
 	Short: "Web-Dev type stuff in Go",
-	Long: `ghast is a simple toolkit for quickly building powerful
-	web applications in Go.
-	
+	Long: `
+	ghast is a simple toolkit for quickly building powerful web applications in Go.
+
 	ghast aims to make developing websites, web apis, and web apps as quick and simple as possible.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:

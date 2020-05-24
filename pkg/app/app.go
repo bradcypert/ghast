@@ -14,6 +14,14 @@ type App struct {
 	serverConfig *http.Server
 }
 
+// NewApp constructor function for ghast app
+func (a App) NewApp() App {
+	return App{
+		ghastContainer.NewContainer(),
+		nil,
+	}
+}
+
 // Start boots up the HTTP server and binds a route listener
 func (a App) Start() {
 	router, routerOK := a.c.Make("ghast/router").(ghastRouter.Router)
