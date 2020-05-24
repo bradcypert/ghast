@@ -40,6 +40,7 @@ import (
 	"log"
 	"net/http"
 
+	ghastApp "github.com/bradcypert/ghast/pkg/app"
 	ghastRouter "github.com/bradcypert/ghast/pkg/router"
 )
 
@@ -57,7 +58,8 @@ func main() {
 		fmt.Fprint(w, "Hello "+r.Context().Value("name").(string))
 	})
 	
-	s := router.DefaultServer()
-	log.Fatal(s.ListenAndServe())
+	app := ghastApp.NewApp()
+	app.SetRouter(router)
+	app.Start()
 }
 `
