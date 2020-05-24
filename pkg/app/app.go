@@ -15,7 +15,7 @@ type App struct {
 }
 
 // NewApp constructor function for ghast app
-func (a App) NewApp() App {
+func NewApp() App {
 	return App{
 		ghastContainer.NewContainer(),
 		nil,
