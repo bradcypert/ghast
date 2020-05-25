@@ -4,8 +4,7 @@
 
 Ghast is an "All in one" toolkit for building reliable Go web applications.
 
-Whether you're building an API, website, or something a little more exotic (still over HTTP/HTTPS protocols)
-Ghast has got your back. Ghast is a collection of common functionality that I've extracted and refactored from several different Golang APIs and takes inspiration from classics such as "Rails" and "Laravel".
+Whether you're building an API, website, or something a little more exotic, Ghast has got your back. Ghast is a collection of common functionality that I've extracted, refactored, and built upon from several different Golang APIs and takes inspiration from classics such as "Rails" and "Laravel".
 
 Here's what you should know about Ghast:
 
@@ -32,6 +31,41 @@ ghast new MyProject
 
 ```bash
 ghast make controller UsersController
+```
+
+# GhastApp
+
+The Ghast framework ships encapsulated in the `GhastApp` struct. However, you can use individual pieces of Ghast if you would prefer. I've tried to make all of these pieces provide some value individually, but the router is the only real candidate for use outside of the framework at the moment. That being said, `GhastApp` takes care of setting up your application, dependency injection container, and router. If you're building a full-fledged application, I strongly recommend using the `GhastApp` as it is the intended way to use Ghast.
+
+TLDR: If you're not sure if you want the `GhastApp` or `GhastRouter`, use the `GhastApp` unless you are specifically only wanting routing.
+
+Using `ghast new MyProjectName` from the command line will generate a new main.go file for you that's setup to use `GhastApp`.
+
+```go
+package main
+
+import (
+	"fmt"
+	"net/http"
+
+	ghastApp "github.com/bradcypert/ghast/pkg/app"
+	ghastRouter "github.com/bradcypert/ghast/pkg/router"
+)
+
+func main() {
+	router := ghastRouter.Router{}
+
+	// Want to use controllers instead? Try running "ghast make controller MyController" from your terminal
+	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, "Hello from Ghast!")
+	})
+
+	app := ghastApp.NewApp()
+	app.SetRouter(router)
+	app.Start()
+}
+
 ```
 
 # GhastRouter
@@ -64,7 +98,7 @@ func main() {
 
 ### Path Variables
 
-GhastRouter also allows you to specify flexible route pattern that can be used to retrieve values from the route.
+GhastRouter also allows you to specify a flexible route pattern that can be used to retrieve values from the route. Check out Ghast's controllers if you'd like to find an even cleaner way to retrieve path parameters.
 
 ```go
 router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
@@ -143,8 +177,30 @@ func (c *TestController) Index(w http.ResponseWriter, r *http.Request) {
 	myStruct := Thing{Foo: "bar"}
 	c.Success(w, myStruct)
 }
-
 ```
+
+Controllers also provide a lot of functionality for working with the HTTP request and response writer objects.
+
+```go
+package controllers
+
+import (
+	"net/http"
+
+	ghastController "github.com/bradcypert/ghast/pkg/controllers"
+)
+
+type TestController struct {
+	ghastController.GhastController
+}
+
+func (c *TestController) Index(w http.ResponseWriter, r *http.Request) {
+	// get user ID from path, /user/:user
+	userId := c.PathParam("user").(string)
+}
+```
+
+I strongly recommend checking out the GoDoc for Ghast to get a better understanding of what is possible with Ghast's controllers (and all of Ghast, for that matter).
 
 # Ghast's DI Container
 
