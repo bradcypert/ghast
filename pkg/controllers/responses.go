@@ -7,10 +7,6 @@ import (
 	"reflect"
 )
 
-// GhastController should be embedded into consumer controllers
-// and provides helper functions for working with the responseWriter
-type GhastController struct{}
-
 // Move to internal package
 func writeOut(w http.ResponseWriter, output interface{}) error {
 	if reflect.ValueOf(output).Kind() != reflect.Struct {

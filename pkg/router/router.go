@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	ghastContainer "github.com/bradcypert/ghast/pkg/container"
 	pathToRegexp "github.com/soongo/path-to-regexp"
 )
 
@@ -20,6 +21,7 @@ type Binding struct {
 
 // Router struct models our routes to match off of and their behavior
 type Router struct {
+	container   ghastContainer.Container
 	gets        []Binding
 	posts       []Binding
 	patches     []Binding
@@ -37,6 +39,12 @@ type Router struct {
 func (r *Router) AddMiddleware(fn []MiddlewareFunc) *Router {
 	r.middlewares = append(r.middlewares, fn...)
 	return r
+}
+
+// SetDIContainer sets up the DI container that this router will use.
+// The provided DI container will be available in all controllers via context (or controller helpers)
+func (r *Router) SetDIContainer(c ghastContainer.Container) {
+	r.container = c
 }
 
 // ServeHTTP allows the router to adhere to the handler func requirements
@@ -100,6 +108,7 @@ func (r Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 					ctx = context.WithValue(ctx, key, value)
 				}
 			}
+			ctx = context.WithValue(ctx, "ghast/container", r.container)
 			r := req.WithContext(ctx)
 			binding.handler(rw, r)
 			break

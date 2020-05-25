@@ -40,10 +40,13 @@ func (a App) Start() {
 	// but always overwrite the handler to use the ghast router
 	s.Handler = router
 
+	// add in our DI container for the router to have access to
+	router.SetDIContainer(a.c)
+
 	log.Fatal(s.ListenAndServe())
 }
 
-// SetServerConfig provides the app with a custom to use Server configuration
+// SetServerConfig provides the app with a custom use Server configuration
 func (a App) SetServerConfig(config *http.Server) {
 	a.serverConfig = config
 }
