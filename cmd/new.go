@@ -2,11 +2,16 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"text/template"
 
 	"github.com/spf13/cobra"
 )
+
+func new() {
+
+}
 
 // newCmd cobra command to help generate a new Ghast project
 var newCmd = &cobra.Command{
@@ -16,13 +21,45 @@ var newCmd = &cobra.Command{
 	Long:  `Creates a new Ghast project based off the provided project name.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		projectName := args[0]
-		t := template.Must(template.New("main").Parse(mainTemplate))
+		runDir, err := os.Getwd()
+		if err != nil {
+			log.Fatal("Unable to get working directory when creating new ghast app")
+		}
+
+		// make relevant directories
 		os.Mkdir(projectName, 0777)
-		f, err := os.Create(fmt.Sprintf("./%s/main.go", projectName))
+		os.Mkdir(projectName+"/views", 0777)
+		os.Mkdir(projectName+"/controllers", 0777)
+
+		// make initial controller
+		controllerTemplate := template.Must(template.New("controller").Parse(demoControllerTemplate))
+		os.Chdir("./" + projectName + "/controllers")
+		f, err := os.Create("./HomeController.go")
+		if err != nil {
+			panic("Unable to create new Ghast application controller")
+		}
+		controllerTemplate.Execute(f, nil)
+		f.Close()
+		os.Chdir(runDir)
+
+		// make initial view
+		viewTemplate := template.Must(template.New("view").Parse(viewTemplate))
+		os.Chdir("./" + projectName + "/views")
+		f, err = os.Create("./template.jet")
+		if err != nil {
+			panic("Unable to create new Ghast application template")
+		}
+		viewTemplate.Execute(f, nil)
+		f.Close()
+		os.Chdir(runDir)
+
+		// make main file
+		mainTemplate := template.Must(template.New("main").Parse(mainTemplate))
+		f, err = os.Create(fmt.Sprintf("./%s/main.go", projectName))
 		if err != nil {
 			panic("Unable to create new Ghast application")
 		}
-		t.Execute(f, nil)
+		mainTemplate.Execute(f, nil)
 		f.Close()
 
 		fmt.Sprintf("Successfully create a new Ghast project in ./%s", projectName)
@@ -32,6 +69,38 @@ var newCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(newCmd)
 }
+
+var demoControllerTemplate = `
+package controllers
+
+import (
+	"net/http"
+	ghastController "github.com/bradcypert/ghast/pkg/controllers"
+)
+
+type HomeController struct {
+	ghastController.GhastController
+}
+
+func (c HomeController) Index(w http.ResponseWriter, r *http.Request) {
+  	c.View("template.jet", w, nil, nil)
+}
+`
+
+var viewTemplate = `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello from Ghast!</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <h1>Hello from Ghast!</h1>
+  </body>
+</html>
+`
 
 var mainTemplate = `package main
 

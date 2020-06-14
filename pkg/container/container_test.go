@@ -20,10 +20,10 @@ func TestResponses(t *testing.T) {
 	t.Run("Should bind to the container correctly", func(t *testing.T) {
 		container := NewContainer()
 
-		container.Bind("SECRET_KEY", func(container Container) interface{} {
+		container.Bind("SECRET_KEY", func(container *Container) interface{} {
 			return "ABC123"
 		})
-		container.Bind("Bar", func(container Container) interface{} {
+		container.Bind("Bar", func(container *Container) interface{} {
 			return Bar{
 				container.Make("SECRET_KEY").(string),
 			}

@@ -98,12 +98,12 @@ func main() {
 
 ### Path Variables
 
-GhastRouter also allows you to specify a flexible route pattern that can be used to retrieve values from the route. Check out Ghast's controllers if you'd like to find an even cleaner way to retrieve path parameters.
+GhastRouter also allows you to specify a flexible route pattern that can be used to retrieve values from the route.
 
 ```go
 router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusOK)
-    fmt.Fprint(w, "Hello "+r.Context().Value("name").(string))
+    fmt.Fprint(w, "Hello "+router.PathParam(r, "name").(string))
 })
 ```
 
