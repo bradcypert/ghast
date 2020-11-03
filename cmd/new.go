@@ -9,10 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func new() {
-
-}
-
 // newCmd cobra command to help generate a new Ghast project
 var newCmd = &cobra.Command{
 	Use:   "new",
