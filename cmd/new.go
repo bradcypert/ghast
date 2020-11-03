@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"text/template"
 
 	"github.com/spf13/cobra"
@@ -21,16 +23,35 @@ var newCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal("Unable to get working directory when creating new ghast app")
 		}
+		fmt.Print("Please enter your root package name: ")
+		reader := bufio.NewReader(os.Stdin)
+		text, _ := reader.ReadString('\n')
+		// convert CRLF to LF
+		pkgName := strings.Replace(text, "\n", "", -1)
 
 		// make relevant directories
 		os.Mkdir(projectName, 0777)
 		os.Mkdir(projectName+"/views", 0777)
 		os.Mkdir(projectName+"/controllers", 0777)
 
+		type pkg struct {
+			Pkg string
+		}
+		// make mod file
+		modFileTemplate := template.Must(template.New("mod").Parse(modTemplate))
+		os.Chdir("./" + projectName)
+		f, err := os.Create("./go.mod")
+		if err != nil {
+			panic("Unable to create new Ghast application controller")
+		}
+		modFileTemplate.Execute(f, pkg{pkgName})
+		f.Close()
+		os.Chdir(runDir)
+
 		// make initial controller
 		controllerTemplate := template.Must(template.New("controller").Parse(demoControllerTemplate))
 		os.Chdir("./" + projectName + "/controllers")
-		f, err := os.Create("./HomeController.go")
+		f, err = os.Create("./HomeController.go")
 		if err != nil {
 			panic("Unable to create new Ghast application controller")
 		}
@@ -65,6 +86,11 @@ var newCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(newCmd)
 }
+
+var modTemplate = `module {{.Pkg}}
+
+go 1.13
+`
 
 var demoControllerTemplate = `
 package controllers
