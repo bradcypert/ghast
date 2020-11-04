@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 	"text/template"
 
@@ -79,7 +80,22 @@ var newCmd = &cobra.Command{
 		mainTemplate.Execute(f, nil)
 		f.Close()
 
-		fmt.Sprintf("Successfully create a new Ghast project in ./%s", projectName)
+		os.Chdir("./" + projectName)
+		// finally fetch the go modules we need for ghast.
+		goExecutable, err := exec.LookPath("go")
+		cmdGoGet := &exec.Cmd{
+			Path:   goExecutable,
+			Args:   []string{goExecutable, "get", "-u", "./..."},
+			Stdout: os.Stdout,
+			Stdin:  os.Stdin,
+		}
+
+		cmdGoGet.Run()
+		// if err = cmdGoGet.Run(); err != nil {
+		// 	panic("Unable to fetch go modules")
+		// }
+
+		fmt.Printf("Successfully create a new Ghast project in ./%s", projectName)
 	},
 }
 
