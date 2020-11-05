@@ -13,6 +13,25 @@ type testcase struct {
 	Body   string
 }
 
+func TestPathParam(t *testing.T) {
+	t.Run("should be able to get path variables", func(t *testing.T) {
+		router := Router{}
+		var name string
+
+		router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
+			name = router.PathParam(r, "name").(string)
+		})
+
+		server := router.DefaultServer()
+		req := httptest.NewRequest(http.MethodGet, "/foo", nil)
+		resp := httptest.NewRecorder()
+		server.Handler.ServeHTTP(resp, req)
+		if name != "foo" {
+			t.Error("Failed to set name via context params")
+		}
+	})
+}
+
 func TestResponses(t *testing.T) {
 
 	t.Run("should handle GETs correctly", func(t *testing.T) {

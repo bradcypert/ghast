@@ -9,8 +9,8 @@ import (
 // makeCmd represents the make command
 var makeCmd = &cobra.Command{
 	Use:   "make",
-	Short: "This command help you make components for your web application.",
-	Long:  `This command help you make components for your web application.`,
+	Short: "This command helps you make components for your web application.",
+	Long:  `This command helps you make components for your web application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("make called")
 	},
