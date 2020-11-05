@@ -81,7 +81,16 @@ var newCmd = &cobra.Command{
 		f.Close()
 
 		os.Chdir("./" + projectName)
-		// finally fetch the go modules we need for ghast.
+		// generate a YAML config
+		yml := template.Must(template.New("yml").Parse(yamlTemplate))
+		f, err = os.Create("./config.yml")
+		if err != nil {
+			panic("Unable to create ghast's config.yml application")
+		}
+		yml.Execute(f, pkg{projectName})
+		f.Close()
+
+		// fetch the go modules we need for ghast.
 		goExecutable, err := exec.LookPath("go")
 		cmdGoGet := &exec.Cmd{
 			Path:   goExecutable,
@@ -90,12 +99,13 @@ var newCmd = &cobra.Command{
 			Stdin:  os.Stdin,
 		}
 
+		// A successful run of this has an exit code of 2
 		cmdGoGet.Run()
 		// if err = cmdGoGet.Run(); err != nil {
 		// 	panic("Unable to fetch go modules")
 		// }
 
-		fmt.Printf("Successfully create a new Ghast project in ./%s", projectName)
+		fmt.Printf("Successfully created a new Ghast project in ./%s", projectName)
 	},
 }
 
@@ -106,6 +116,17 @@ func init() {
 var modTemplate = `module {{.Pkg}}
 
 go 1.13
+`
+
+var yamlTemplate = `
+# modify freely, remove at your own risk
+ghast:
+  config:
+  	port: 4000
+
+app:
+  config:
+    appName: {{.Pkg}}
 `
 
 var demoControllerTemplate = `
