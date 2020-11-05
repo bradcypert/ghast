@@ -9,6 +9,7 @@ import (
 
 	"github.com/CloudyKit/jet"
 
+	"github.com/bradcypert/ghast/pkg/config"
 	ghastContainer "github.com/bradcypert/ghast/pkg/container"
 	ghastRouter "github.com/bradcypert/ghast/pkg/router"
 )
@@ -30,6 +31,23 @@ func NewApp() App {
 	var root, _ = os.Getwd()
 	var views = jet.NewHTMLSet(filepath.Join(root, "views"))
 	container := ghastContainer.NewContainer()
+
+	// Bind the config options into the app. This structure can be any number of items deep.
+	configOptions, err := config.Parse()
+	if (err != nil) {
+		log.Panic("Unable to bind your yaml config into the Ghast Container. Please ensure that your config is valid YAML")
+	}
+	configs, err := config.ParsedConfigToContainerKeys(configOptions)
+	if (err != nil) {
+		log.Panic("Unable to bind your yaml config into the Ghast Container. Please ensure that your config is valid YAML")
+	}
+
+	for k, v := range configs {
+		container.Bind("@"+k, func(*c Container) {
+			return v;
+		});
+	}
+
 	AppContext = context.WithValue(context.Background(), "ghast/container", container)
 	return App{
 		container,

@@ -8,6 +8,7 @@ require (
 	github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6 // indirect
 	github.com/dlclark/regexp2 v1.4.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/jeremywohl/flatten v1.0.1
 	github.com/jinzhu/gorm v1.9.12 // indirect
 	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/magiconair/properties v1.8.4 // indirect
@@ -25,5 +26,5 @@ require (
 	golang.org/x/sys v0.0.0-20201101102859-da207088b7d1 // indirect
 	golang.org/x/text v0.3.4 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
-	gopkg.in/yaml.v2 v2.3.0 // indirect
+	gopkg.in/yaml.v2 v2.3.0
 )
