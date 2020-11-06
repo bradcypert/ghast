@@ -17,6 +17,17 @@ func (c GhastController) Container() *ghastContainer.Container {
 	return ghastApp.AppContext.Value("ghast/container").(*ghastContainer.Container)
 }
 
+// Config gets a config value from the controller's container.
+// Config keys map to YAML in a flattened dot structure prefixed by an @.
+// For example:
+// a:
+//   b: "c"
+// "c" can be retrieved via @a.b
+// We can't guarantee the type, so we return interface{}
+func (c GhastController) Config(key string) interface{} {
+	return c, Container().Make(key)
+}
+
 // PathParam Get a Path Parameter from a given request and key
 func (c GhastController) PathParam(r *http.Request, key string) interface{} {
 	return r.Context().Value(key)

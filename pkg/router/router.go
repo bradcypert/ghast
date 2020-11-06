@@ -236,7 +236,7 @@ func (r *Router) TraceM(route string, f func(http.ResponseWriter,
 // with the router bound as the handler and some sensible defaults
 func (r Router) DefaultServer() *http.Server {
 	return &http.Server{
-		Addr:           ":8080",
+		Addr:           ":9000",
 		Handler:        r,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,

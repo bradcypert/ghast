@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 
 	"github.com/CloudyKit/jet"
-
 	"github.com/bradcypert/ghast/pkg/config"
 	ghastContainer "github.com/bradcypert/ghast/pkg/container"
 	ghastRouter "github.com/bradcypert/ghast/pkg/router"
@@ -78,6 +77,7 @@ func (a App) Start() {
 
 	// but always overwrite the handler to use the ghast router
 	s.Handler = router
+	s.Addr = a.c.Make("@ghast.config.port")
 
 	// Bind the app to the container so its available
 	a.c.Bind("ghast/app", func(c *ghastContainer.Container) interface{} {
