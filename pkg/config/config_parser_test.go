@@ -24,7 +24,7 @@ func TestConfigParser(t *testing.T) {
 		}
 
 		if parsed["abc.def"] != "ghi" {
-			t.Errorf("expected: abc.def.ghi\ngot: %v", parsed["abc.def"])
+			t.Errorf("Unable to find adc.def\nexpected: ghi\ngot: %v", parsed["abc.def"])
 		}
 	})
 }
