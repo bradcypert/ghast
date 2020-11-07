@@ -42,7 +42,7 @@ func NewApp() App {
 	}
 
 	for k, v := range configs {
-		container.Bind("@"+k, func(*c Container) {
+		container.Bind("@"+k, func(*c *ghastContainer.Container) {
 			return v;
 		});
 	}
