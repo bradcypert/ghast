@@ -55,7 +55,7 @@ func NewAppWithConfig(debugOptions DebugOptions) App {
 
 	for k, v := range configs {
 		if debugOptions.shouldDebugConfig {
-			Fmt.Printf("Binding %v to key: %s", v, k)
+			fmt.Printf("Binding %v to key: %s", v, k)
 		}
 		container.Bind("@"+k, func(c *ghastContainer.Container) interface{} {
 			return v
@@ -67,6 +67,7 @@ func NewAppWithConfig(debugOptions DebugOptions) App {
 		container,
 		nil,
 		views,
+		&debugOptions
 	}
 }
 
