@@ -13,7 +13,7 @@ func TestConfigParser(t *testing.T) {
 			"r": 2138,
 		}
 
-		parsed, err := ParsedConfigToContainerKeys(k)
+		parsed, err := ParsedConfigToContainerKeys(&k)
 
 		if err != nil {
 			t.Errorf("failed parsing config")

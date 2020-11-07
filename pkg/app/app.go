@@ -32,7 +32,7 @@ func NewApp() App {
 	container := ghastContainer.NewContainer()
 
 	// Bind the config options into the app. This structure can be any number of items deep.
-	configOptions, err := config.Parse()
+	configOptions, err := config.Parse(root + "/config.yml")
 	if err != nil {
 		log.Panic("Unable to bind your yaml config into the Ghast Container. Please ensure that your config is valid YAML")
 	}
@@ -77,7 +77,7 @@ func (a App) Start() {
 
 	// but always overwrite the handler to use the ghast router
 	s.Handler = router
-	s.Addr = a.c.Make("@ghast.config.port")
+	s.Addr = a.c.Make("@ghast.config.port").(string)
 
 	// Bind the app to the container so its available
 	a.c.Bind("ghast/app", func(c *ghastContainer.Container) interface{} {

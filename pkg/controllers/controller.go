@@ -25,7 +25,7 @@ func (c GhastController) Container() *ghastContainer.Container {
 // "c" can be retrieved via @a.b
 // We can't guarantee the type, so we return interface{}
 func (c GhastController) Config(key string) interface{} {
-	return c, Container().Make(key)
+	return c.Container().Make(key)
 }
 
 // PathParam Get a Path Parameter from a given request and key
