@@ -19,15 +19,25 @@ import (
 // Override values in this context at your own risk.
 var AppContext context.Context
 
+type DebugOptions struct {
+	shouldDebugConfig bool
+}
+
 // App defines a struct that encapsulates the entire ghast framework + application specific settings
 type App struct {
 	c            *ghastContainer.Container
 	serverConfig *http.Server
 	views        *jet.Set
+	debugOptions *DebugOptions
 }
 
 // NewApp constructor function for ghast app
 func NewApp() App {
+	return NewAppWithConfig(DebugOptions{})
+}
+
+// NewAppWithConfig constructor function for ghast app with a separate app config (used for debugging purposes)
+func NewAppWithConfig(debugOptions DebugOptions) App {
 	var root, _ = os.Getwd()
 	var views = jet.NewHTMLSet(filepath.Join(root, "views"))
 	container := ghastContainer.NewContainer()
@@ -44,6 +54,9 @@ func NewApp() App {
 	}
 
 	for k, v := range configs {
+		if debugOptions.shouldDebugConfig {
+			Fmt.Printf("Binding %v to key: %s", v, k)
+		}
 		container.Bind("@"+k, func(c *ghastContainer.Container) interface{} {
 			return v
 		})
