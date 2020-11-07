@@ -67,7 +67,7 @@ func NewAppWithConfig(debugOptions DebugOptions) App {
 		container,
 		nil,
 		views,
-		&debugOptions
+		&debugOptions,
 	}
 }
 
