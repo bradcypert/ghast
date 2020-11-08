@@ -50,8 +50,8 @@ func NewAppWithConfig(debugOptions DebugOptions) App {
 	}
 	configs, err := config.ParsedConfigToContainerKeys(configOptions)
 
-	fmt.Printf("--- m:\n%v\n\n", ((configs)["b"]))
-	fmt.Printf("--- m:\n%v\n\n", ((*configOptions)["b"]))
+	fmt.Printf("--- m:\n%v\n\n", (configs))
+	fmt.Printf("--- m:\n%v\n\n", (*configOptions))
 
 	if err != nil {
 		log.Panic("Unable to bind your yaml config into the Ghast Container. Please ensure that your config is valid YAML")
