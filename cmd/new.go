@@ -158,7 +158,7 @@ var viewTemplate = `
     <title>Hello from Ghast!</title>
   </head>
   <body>
-    <h1>Hello from {{ AppName }}!</h1>
+    <h1>Hello from {{ "{{ AppName }}" }}!</h1>
     <p>You've successfully scaffolded out your first Ghast application! There are tons of places to take this project from here! I've provided a few suggestions below:</p>
     <ul>
       <li>Building just an API? Delete the views folder if you don't need it.</li>
