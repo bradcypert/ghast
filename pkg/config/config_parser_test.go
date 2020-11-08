@@ -41,7 +41,7 @@ b:
 			t.Errorf("failed parsing config")
 		}
 
-		if parsed["r"] != 2138 {
+		if parsed["r"] != "2138" {
 			t.Errorf("r not properly parsed")
 		}
 
@@ -49,7 +49,7 @@ b:
 			t.Errorf("Unable to find adc.def\nexpected: ghi\ngot: %v", parsed["abc.def"])
 		}
 
-		if parsed["abc.jkl"] != 1234 {
+		if parsed["abc.jkl"] != "1234" {
 			t.Errorf("Unable to find adc.def\nexpected: ghi\ngot: %v", parsed["abc.def"])
 		}
 	})

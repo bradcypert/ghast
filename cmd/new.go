@@ -122,7 +122,7 @@ var yamlTemplate = `
 # modify freely, remove at your own risk
 ghast:
   config:
-  	port: 9000
+    port: 9000
 
 app:
   config:
