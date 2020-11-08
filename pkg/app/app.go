@@ -20,7 +20,7 @@ import (
 var AppContext context.Context
 
 type DebugOptions struct {
-	shouldDebugConfig bool
+	ShouldDebugConfig bool
 }
 
 // App defines a struct that encapsulates the entire ghast framework + application specific settings
@@ -54,7 +54,7 @@ func NewAppWithConfig(debugOptions DebugOptions) App {
 	}
 
 	for k, v := range configs {
-		if debugOptions.shouldDebugConfig {
+		if debugOptions.ShouldDebugConfig {
 			fmt.Printf("Binding %v to key: %s", v, k)
 		}
 		container.Bind("@"+k, func(c *ghastContainer.Container) interface{} {
