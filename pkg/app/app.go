@@ -50,8 +50,11 @@ func NewAppWithConfig(debugOptions DebugOptions) App {
 	}
 	configs, err := config.ParsedConfigToContainerKeys(configOptions)
 
-	fmt.Printf("--- m:\n%v\n\n", configs)
-	fmt.Printf("--- m:\n%v\n\n", *configOptions)
+	if debugOptions.ShouldDebugConfig {
+		fmt.Println("Parsed configs follow by original config options.")
+		fmt.Printf("--- m:\n%v\n\n", configs)
+		fmt.Printf("--- m:\n%v\n\n", *configOptions)
+	}
 
 	if err != nil {
 		log.Panic("Unable to bind your yaml config into the Ghast Container. Please ensure that your config is valid YAML")
@@ -97,7 +100,7 @@ func (a App) Start() {
 
 	// but always overwrite the handler to use the ghast router
 	s.Handler = router
-	s.Addr = a.c.Make("@ghast.config.port").(string)
+	s.Addr = ":" + a.c.Make("@ghast.config.port").(string)
 
 	// Bind the app to the container so its available
 	a.c.Bind("ghast/app", func(c *ghastContainer.Container) interface{} {
