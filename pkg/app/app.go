@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -51,17 +50,8 @@ func NewAppWithConfig(debugOptions DebugOptions) App {
 	}
 	configs, err := config.ParsedConfigToContainerKeys(configOptions)
 
-	b, err := json.MarshalIndent(configOptions, "", "  ")
-	if err != nil {
-		fmt.Println("error:", err)
-	}
-	fmt.Print(string(b))
-
-	b, err = json.MarshalIndent(configs, "", "  ")
-	if err != nil {
-		fmt.Println("error:", err)
-	}
-	fmt.Print(string(b))
+	fmt.Printf("--- m:\n%v\n\n", ((configs)["b"]))
+	fmt.Printf("--- m:\n%v\n\n", ((*configOptions)["b"]))
 
 	if err != nil {
 		log.Panic("Unable to bind your yaml config into the Ghast Container. Please ensure that your config is valid YAML")

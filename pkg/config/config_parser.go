@@ -11,14 +11,17 @@ import (
 /// Parse opens, loads and parses a YAML file via path
 /// returns a potentially nested Map and a possible error.
 func Parse(configPath string) (*map[string]interface{}, error) {
-	m := make(map[string]interface{})
 	data, err := ioutil.ReadFile(configPath)
-
 	if err != nil {
-		return &m, err
+		return nil, err
 	}
+	return parseYamlString(data)
+}
 
-	err = yaml.Unmarshal(data, &m)
+func parseYamlString(data []byte) (*map[string]interface{}, error) {
+	m := make(map[string]interface{})
+
+	err := yaml.Unmarshal(data, &m)
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
