@@ -150,7 +150,6 @@ func (c HomeController) Index(w http.ResponseWriter, r *http.Request) {
 `
 
 var viewTemplate = `
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -176,7 +175,6 @@ var mainTemplate = `package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	ghastApp "github.com/bradcypert/ghast/pkg/app"

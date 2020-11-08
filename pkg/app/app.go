@@ -48,6 +48,7 @@ func NewAppWithConfig(debugOptions DebugOptions) App {
 	if err != nil {
 		log.Panic("Unable to bind your yaml config into the Ghast Container. Please ensure that your config is valid YAML")
 	}
+
 	configs, err := config.ParsedConfigToContainerKeys(configOptions)
 
 	if debugOptions.ShouldDebugConfig {

@@ -59,27 +59,27 @@ type {{.Name}} struct {
 	ghastController.GhastController
 }
 
-func (c *{{.Name}}) Index(w http.ResponseWriter, r *http.Request) {
+func (c {{.Name}}) Index(w http.ResponseWriter, r *http.Request) {
   	c.NotFound(w, "")
 }
 
-func (c *{{.Name}}) Get(w http.ResponseWriter, r *http.Request) {
+func (c {{.Name}}) Get(w http.ResponseWriter, r *http.Request) {
 	c.NotFound(w, "")
 }
 
-func (c *{{.Name}}) Create(w http.ResponseWriter, r *http.Request) {
+func (c {{.Name}}) Create(w http.ResponseWriter, r *http.Request) {
 	c.NotFound(w, "")
 }
 
-func (c *{{.Name}}) Edit(w http.ResponseWriter, r *http.Request) {
+func (c {{.Name}}) Edit(w http.ResponseWriter, r *http.Request) {
 	c.NotFound(w, "")
 }
 
-func (c *{{.Name}}) Update(w http.ResponseWriter, r *http.Request) {
+func (c {{.Name}}) Update(w http.ResponseWriter, r *http.Request) {
 	c.NotFound(w, "")
 }
 
-func (c *{{.Name}}) Delete(w http.ResponseWriter, r *http.Request) {
+func (c {{.Name}}) Delete(w http.ResponseWriter, r *http.Request) {
 	c.NotFound(w, "")
 }
 `
