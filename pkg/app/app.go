@@ -19,11 +19,14 @@ import (
 // Override values in this context at your own risk.
 var AppContext context.Context
 
+// DebugOptions provides additional options for debugging application creation and start
 type DebugOptions struct {
 	ShouldDebugConfig bool
 }
 
 // App defines a struct that encapsulates the entire ghast framework + application specific settings
+// generally, you should use the NewApp function instead of creating a struct instance directly, but we have
+// chosen to support creating the struct directly to have better control of the app creation process.
 type App struct {
 	c            *ghastContainer.Container
 	serverConfig *http.Server
@@ -32,11 +35,14 @@ type App struct {
 }
 
 // NewApp constructor function for ghast app
+// Generally, you'll want to use this over creating a new struct instance directly.
 func NewApp() App {
 	return NewAppWithConfig(DebugOptions{})
 }
 
 // NewAppWithConfig constructor function for ghast app with a separate app config (used for debugging purposes)
+// Note: depending on your config, this can log a LOT of data to STDOUT. You will most likely want `NewApp` for
+// production deployments.
 func NewAppWithConfig(debugOptions DebugOptions) App {
 	var root, _ = os.Getwd()
 	var views = jet.NewHTMLSet(filepath.Join(root, "views"))
