@@ -1,41 +1,41 @@
 package container
 
 import (
-    "testing"
+	"testing"
 )
 
 type Foo interface {
-    hasFoo() bool
+	hasFoo() bool
 }
 
 type Bar struct {
-    secretKey string
+	secretKey string
 }
 
 func (b Bar) hasFoo() bool {
-    return false
+	return false
 }
 
 func TestResponses(t *testing.T) {
-    t.Run("Should bind to the container correctly", func(t *testing.T) {
-        container := NewContainer()
+	t.Run("Should bind to the container correctly", func(t *testing.T) {
+		container := NewContainer()
 
-        container.Bind("SECRET_KEY", func(container *Container) interface{} {
-            return "ABC123"
-        })
-        container.Bind("Bar", func(container *Container) interface{} {
-            return Bar{
-                container.Make("SECRET_KEY").(string),
-            }
-        })
+		container.Bind("SECRET_KEY", func(container *Container) interface{} {
+			return "ABC123"
+		})
+		container.Bind("Bar", func(container *Container) interface{} {
+			return Bar{
+				container.Make("SECRET_KEY").(string),
+			}
+		})
 
-        bar := container.Make("Bar").(Bar)
-        if bar.secretKey != "ABC123" {
-            t.Errorf("Bound bar does not have the correct secret key")
-        }
+		bar := container.Make("Bar").(Bar)
+		if bar.secretKey != "ABC123" {
+			t.Errorf("Bound bar does not have the correct secret key")
+		}
 
-        if bar.hasFoo() != false {
-            t.Errorf("Bound bar does not have the correct hasFoo implementation")
-        }
-    })
+		if bar.hasFoo() != false {
+			t.Errorf("Bound bar does not have the correct hasFoo implementation")
+		}
+	})
 }
