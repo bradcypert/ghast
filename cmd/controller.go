@@ -51,35 +51,35 @@ var controllerTemplate = `
 package {{.Package}}
 
 import (
-	"net/http"
-	ghastController "github.com/bradcypert/ghast/pkg/controllers"
+    "net/http"
+    ghastController "github.com/bradcypert/ghast/pkg/controllers"
 )
 
 type {{.Name}} struct {
-	ghastController.GhastController
+    ghastController.GhastController
 }
 
 func (c {{.Name}}) Index(w http.ResponseWriter, r *http.Request) {
-  	c.NotFound(w, "")
+    c.NotFound(w, "")
 }
 
 func (c {{.Name}}) Get(w http.ResponseWriter, r *http.Request) {
-	c.NotFound(w, "")
+    c.NotFound(w, "")
 }
 
 func (c {{.Name}}) Create(w http.ResponseWriter, r *http.Request) {
-	c.NotFound(w, "")
+    c.NotFound(w, "")
 }
 
 func (c {{.Name}}) Edit(w http.ResponseWriter, r *http.Request) {
-	c.NotFound(w, "")
+    c.NotFound(w, "")
 }
 
 func (c {{.Name}}) Update(w http.ResponseWriter, r *http.Request) {
-	c.NotFound(w, "")
+    c.NotFound(w, "")
 }
 
 func (c {{.Name}}) Delete(w http.ResponseWriter, r *http.Request) {
-	c.NotFound(w, "")
+    c.NotFound(w, "")
 }
 `

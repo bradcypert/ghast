@@ -13,10 +13,10 @@ var migrationCmd = &cobra.Command{
 	Use:   "migration",
 	Short: "Create a new database migration",
 	Long: `Create a new database migration.
-	
-	Database migrations help manage your application's schema
-	and it's changes over time. Migrations are written in Go and use GORM (ideally).
-	`,
+    
+    Database migrations help manage your application's schema
+    and it's changes over time. Migrations are written in Go and use GORM (ideally).
+    `,
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
 		if pkg == "" {

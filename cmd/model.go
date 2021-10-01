@@ -18,9 +18,9 @@ var modelCmd = &cobra.Command{
 	Use:   "model",
 	Short: "create a new model",
 	Long: `Create a new model for your ghast project.
-	
-	Models leverage GORM and are used to structure the data that you're
-	working with in a way that makes sense to your application's needs.`,
+    
+    Models leverage GORM and are used to structure the data that you're
+    working with in a way that makes sense to your application's needs.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
 		if pkg == "" {
@@ -50,10 +50,10 @@ var modelTemplate = `
 package {{.Package}}
 
 import (
-	"github.com/jinzhu/gorm"
+    "github.com/jinzhu/gorm"
 )
 
 type {{.Name}} struct {
-	gorm.Model
+    gorm.Model
 }
 `

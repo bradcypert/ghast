@@ -19,10 +19,10 @@ var factoryCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Short: "Create a new factory",
 	Long: `Create a new factory.
-	
-	Factories are used for generating data for your application.
-	They are particularly useful during local development and testing,
-	although there are also reasons that you may want to use one in production.`,
+    
+    Factories are used for generating data for your application.
+    They are particularly useful during local development and testing,
+    although there are also reasons that you may want to use one in production.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
 		if pkg == "" {
@@ -64,6 +64,6 @@ package {{.Package}}
 type {{.Name}} struct {}
 
 func (c *{{.Name}}) Create() int {
-  	return c.list.Len()
+    return c.list.Len()
 }
 `

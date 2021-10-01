@@ -102,7 +102,7 @@ var newCmd = &cobra.Command{
 		// A successful run of this has an exit code of 2
 		cmdGoGet.Run()
 		// if err = cmdGoGet.Run(); err != nil {
-		// 	panic("Unable to fetch go modules")
+		//  panic("Unable to fetch go modules")
 		// }
 
 		fmt.Printf("Successfully created a new Ghast project in ./%s", projectName)
@@ -133,19 +133,19 @@ var demoControllerTemplate = `
 package controllers
 
 import (
-	"net/http"
-	ghastController "github.com/bradcypert/ghast/pkg/controllers"
+    "net/http"
+    ghastController "github.com/bradcypert/ghast/pkg/controllers"
 )
 
 type HomeController struct {
-	ghastController.GhastController
+    ghastController.GhastController
 }
 
 func (c HomeController) Index(w http.ResponseWriter, r *http.Request) {
-	vars := make(jet.VarMap)
-	appName := c.Config("@app.config.appName").(string)
-	vars.Set("AppName", appName)
-	c.View("template.jet", w, vars, nil)
+    vars := make(jet.VarMap)
+    appName := c.Config("@app.config.appName").(string)
+    vars.Set("AppName", appName)
+    c.View("template.jet", w, vars, nil)
 }
 `
 
@@ -174,28 +174,28 @@ var viewTemplate = `
 var mainTemplate = `package main
 
 import (
-	"fmt"
-	"net/http"
+    "fmt"
+    "net/http"
 
-	ghastApp "github.com/bradcypert/ghast/pkg/app"
-	ghastRouter "github.com/bradcypert/ghast/pkg/router"
-	"{{.Pkg}}/controllers"
+    ghastApp "github.com/bradcypert/ghast/pkg/app"
+    ghastRouter "github.com/bradcypert/ghast/pkg/router"
+    "{{.Pkg}}/controllers"
 )
 
 func main() {
-	router := ghastRouter.Router{}
+    router := ghastRouter.Router{}
 
-	// We can use controllers. Generate more using "ghast make controller MyControllerName" from your terminal
-	router.Get("/", controllers.HomeController{}.Index)
+    // We can use controllers. Generate more using "ghast make controller MyControllerName" from your terminal
+    router.Get("/", controllers.HomeController{}.Index)
 
-	// Or we can just use standard Go HTTP handler funcs
-	router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, "Hello "+r.Context().Value("name").(string))
-	})
-	
-	app := ghastApp.NewApp()
-	app.SetRouter(router)
-	app.Start()
+    // Or we can just use standard Go HTTP handler funcs
+    router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
+        w.WriteHeader(http.StatusOK)
+        fmt.Fprint(w, "Hello "+r.Context().Value("name").(string))
+    })
+    
+    app := ghastApp.NewApp()
+    app.SetRouter(router)
+    app.Start()
 }
 `

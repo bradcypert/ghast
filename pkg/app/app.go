@@ -117,7 +117,7 @@ func (a App) Start() {
 	// add in our DI container for the router to have access to
 	router.SetDIContainer(a.c)
 
-	fmt.Printf("Ghast Server booting up on %s", s.Addr)
+	fmt.Printf("\nGhast Server booting up on %s", s.Addr)
 	log.Fatal(s.ListenAndServe())
 }
 
