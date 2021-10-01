@@ -1,59 +1,59 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
-	"text/template"
+    "fmt"
+    "os"
+    "text/template"
 
-	"github.com/spf13/cobra"
+    "github.com/spf13/cobra"
 )
 
 type modelOptions struct {
-	Package string
-	Name    string
+    Package string
+    Name    string
 }
 
 // modelCmd represents the model command
 var modelCmd = &cobra.Command{
-	Use:   "model",
-	Short: "create a new model",
-	Long: `Create a new model for your ghast project.
-	
-	Models leverage GORM and are used to structure the data that you're
-	working with in a way that makes sense to your application's needs.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		name := args[0]
-		if pkg == "" {
-			pkg = "models"
-		}
-		options := modelOptions{
-			pkg,
-			name,
-		}
+    Use:   "model",
+    Short: "create a new model",
+    Long: `Create a new model for your ghast project.
+    
+    Models leverage GORM and are used to structure the data that you're
+    working with in a way that makes sense to your application's needs.`,
+    Run: func(cmd *cobra.Command, args []string) {
+        name := args[0]
+        if pkg == "" {
+            pkg = "models"
+        }
+        options := modelOptions{
+            pkg,
+            name,
+        }
 
-		t := template.Must(template.New("model").Parse(modelTemplate))
-		os.Mkdir(pkg, 0777)
-		f, err := os.Create(fmt.Sprintf("./%s/%s.go", pkg, name))
-		if err != nil {
-			panic("Unable to create model")
-		}
-		t.Execute(f, options)
-		f.Close()
-	},
+        t := template.Must(template.New("model").Parse(modelTemplate))
+        os.Mkdir(pkg, 0777)
+        f, err := os.Create(fmt.Sprintf("./%s/%s.go", pkg, name))
+        if err != nil {
+            panic("Unable to create model")
+        }
+        t.Execute(f, options)
+        f.Close()
+    },
 }
 
 func init() {
-	makeCmd.AddCommand(modelCmd)
+    makeCmd.AddCommand(modelCmd)
 }
 
 var modelTemplate = `
 package {{.Package}}
 
 import (
-	"github.com/jinzhu/gorm"
+    "github.com/jinzhu/gorm"
 )
 
 type {{.Name}} struct {
-	gorm.Model
+    gorm.Model
 }
 `
