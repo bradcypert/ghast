@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	// nolint
+	_ "embed"
 	"fmt"
 	"os"
 	"text/template"
@@ -46,14 +48,5 @@ func init() {
 	makeCmd.AddCommand(modelCmd)
 }
 
-var modelTemplate = `
-package {{.Package}}
-
-import (
-    "github.com/jinzhu/gorm"
-)
-
-type {{.Name}} struct {
-    gorm.Model
-}
-`
+//go:embed model.tmpl
+var modelTemplate string

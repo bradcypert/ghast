@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	// nolint
+	_ "embed"
 	"fmt"
 	"os"
 	"text/template"
@@ -58,12 +60,5 @@ func init() {
 	// factoryCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-var factoryTemplate = `
-package {{.Package}}
-
-type {{.Name}} struct {}
-
-func (c *{{.Name}}) Create() int {
-    return c.list.Len()
-}
-`
+//go:embed factory.tmpl
+var factoryTemplate string

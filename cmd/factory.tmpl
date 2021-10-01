@@ -1,0 +1,7 @@
+package {{.Package}}
+
+type {{.Name}} struct {}
+
+func (c *{{.Name}}) Create() int {
+    return c.list.Len()
+}
