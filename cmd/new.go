@@ -134,6 +134,7 @@ package controllers
 
 import (
     "net/http"
+    "github.com/CloudyKit/jet"
     ghastController "github.com/bradcypert/ghast/pkg/controllers"
 )
 
