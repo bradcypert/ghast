@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	// nolint
+	_ "embed"
 	"fmt"
 	"os"
 	"text/template"
@@ -47,39 +49,5 @@ func init() {
 	makeCmd.AddCommand(controllerCmd)
 }
 
-var controllerTemplate = `
-package {{.Package}}
-
-import (
-    "net/http"
-    ghastController "github.com/bradcypert/ghast/pkg/controllers"
-)
-
-type {{.Name}} struct {
-    ghastController.GhastController
-}
-
-func (c {{.Name}}) Index(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
-}
-
-func (c {{.Name}}) Get(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
-}
-
-func (c {{.Name}}) Create(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
-}
-
-func (c {{.Name}}) Edit(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
-}
-
-func (c {{.Name}}) Update(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
-}
-
-func (c {{.Name}}) Delete(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
-}
-`
+//go:embed controller.tmpl
+var controllerTemplate string

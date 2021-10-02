@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	// nolint
+	_ "embed"
 	"fmt"
 	"os"
 	"text/template"
@@ -52,6 +54,5 @@ func init() {
 	// migrationCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-var migrationTemplate = `
-// TODO
-`
+//go:embed migration.tmpl
+var migrationTemplate string

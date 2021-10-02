@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"bufio"
+	// nolint
+	_ "embed"
 	"fmt"
 	"log"
 	"os"
@@ -113,90 +115,17 @@ func init() {
 	rootCmd.AddCommand(newCmd)
 }
 
-var modTemplate = `module {{.Pkg}}
+//go:embed mod.tmpl
+var modTemplate string
 
-go 1.13
-`
+//go:embed yaml.tmpl
+var yamlTemplate string
 
-var yamlTemplate = `
-# modify freely, remove at your own risk
-ghast:
-  config:
-    port: 9000
+//go:embed demoncontroller.tmpl
+var demoControllerTemplate string
 
-app:
-  config:
-    appName: {{.Pkg}}
-`
+//go:embed view.tmpl
+var viewTemplate string
 
-var demoControllerTemplate = `
-package controllers
-
-import (
-    "net/http"
-    "github.com/CloudyKit/jet"
-    ghastController "github.com/bradcypert/ghast/pkg/controllers"
-)
-
-type HomeController struct {
-    ghastController.GhastController
-}
-
-func (c HomeController) Index(w http.ResponseWriter, r *http.Request) {
-    vars := make(jet.VarMap)
-    appName := c.Config("@app.config.appName").(string)
-    vars.Set("AppName", appName)
-    c.View("template.jet", w, vars, nil)
-}
-`
-
-var viewTemplate = `
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Hello from Ghast!</title>
-  </head>
-  <body>
-    <h1>Hello from {{ "{{ AppName }}" }}!</h1>
-    <p>You've successfully scaffolded out your first Ghast application! There are tons of places to take this project from here! I've provided a few suggestions below:</p>
-    <ul>
-      <li>Building just an API? Delete the views folder if you don't need it.</li>
-      <li>No interest in MVC? Toss the controllers directory and just use the router and app directly.</li>
-      <li>Non-commital? No worries, Ghast's router handlers and controller functions all conform to <a href="https://golang.org/pkg/net/http/#HandleFunc">Go's standard HTTP Handler Func</a>. Moving away from Ghast isn't painless (nothing ever is) but shouldn't be too difficult either.</li>
-      <li>Building something huge? Keep the existing patterns in place and use the CLI to generate new controllers, models, or migrations</li>
-    </ul>
-    <p>Don't forget! You can find an up-to-date readme here: <a href="https://www.github.com/bradcypert/ghast">Ghast's Readme</a>. Happy Ghasting!</p>
-  </body>
-</html>
-
-`
-
-var mainTemplate = `package main
-
-import (
-    "fmt"
-    "net/http"
-
-    ghastApp "github.com/bradcypert/ghast/pkg/app"
-    ghastRouter "github.com/bradcypert/ghast/pkg/router"
-    "{{.Pkg}}/controllers"
-)
-
-func main() {
-    router := ghastRouter.Router{}
-
-    // We can use controllers. Generate more using "ghast make controller MyControllerName" from your terminal
-    router.Get("/", controllers.HomeController{}.Index)
-
-    // Or we can just use standard Go HTTP handler funcs
-    router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
-        w.WriteHeader(http.StatusOK)
-        fmt.Fprint(w, "Hello "+r.Context().Value("name").(string))
-    })
-    
-    app := ghastApp.NewApp()
-    app.SetRouter(router)
-    app.Start()
-}
-`
+//go:embed yaml.tmpl
+var mainTemplate string
