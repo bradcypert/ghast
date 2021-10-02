@@ -131,9 +131,18 @@ func (a App) GetViewSet() *jet.Set {
 	return a.views
 }
 
+// Register registers a new key value binding in the Application's DI container
+func (a App) Register(key string, fn func(c *ghastContainer.Container) interface{}) {
+	if a.c == nil {
+		panic("Tried to register to a non-existent DI container")
+	}
+
+	a.c.Bind(key, fn)
+}
+
 // SetRouter sets a user configured ghast router to be used as the application's default router.
 func (a App) SetRouter(router ghastRouter.Router) {
-	a.c.Bind("ghast/router", func(c *ghastContainer.Container) interface{} {
+	a.Register("ghast/router", func(c *ghastContainer.Container) interface{} {
 		return router
 	})
 }
