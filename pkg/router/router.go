@@ -108,6 +108,7 @@ func (r Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 					ctx = context.WithValue(ctx, key, value)
 				}
 			}
+
 			r := req.WithContext(ctx)
 			binding.handler(rw, r)
 			break
@@ -118,6 +119,11 @@ func (r Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 // PathParam Get a Path Parameter from a given request and key
 func (r *Router) PathParam(req *http.Request, key string) interface{} {
 	return req.Context().Value(key)
+}
+
+// PathParam Get a Path Parameter from a given request and key
+func (r *Router) QueryParam(req *http.Request, key string) interface{} {
+	return req.URL.Query()[key]
 }
 
 // Get registers a new GET route with the router

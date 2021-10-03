@@ -33,6 +33,12 @@ func (c GhastController) PathParam(r *http.Request, key string) interface{} {
 	return r.Context().Value(key)
 }
 
+// PathParam Get a Path Parameter from a given request and key
+// returns a list of strings as it supports multiple values for a given path param
+func (c GhastController) QueryParam(r *http.Request, key string) []string {
+	return r.URL.Query()[key]
+}
+
 // View executes a view from the app templates
 func (c GhastController) View(name string, w http.ResponseWriter, vars jet.VarMap, contextualData interface{}) {
 	tmpl, err := ghastApp.GetApp(c.Container()).GetViewSet().GetTemplate(name)
