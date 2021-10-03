@@ -1,6 +1,6 @@
 # ghast
 
-[![Build Status](https://travis-ci.org/bradcypert/ghast.svg?branch=master)](https://travis-ci.org/bradcypert/ghast)
+![CI for Build and Test](https://github.com/bradcypert/ghast/actions/workflows/go.yml/badge.svg) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a944a2dfb411455293e1b6f48344e611)](https://www.codacy.com/gh/bradcypert/ghast/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bradcypert/ghast&amp;utm_campaign=Badge_Grade)
 
 Ghast is an "All in one" toolkit for building reliable Go web applications.
 
