@@ -49,7 +49,7 @@ func NewAppWithConfig(debugOptions DebugOptions) App {
 	container := ghastContainer.NewContainer()
 
 	// Bind the config options into the app. This structure can be any number of items deep.
-	fmt.Printf("Reading config from %s/config.yml", root)
+	fmt.Printf("Reading config from %s/config.yml\n", root)
 	configOptions, err := config.Parse(root + "/config.yml")
 	if err != nil {
 		log.Panic("Unable to bind your yaml config into the Ghast Container. Please ensure that your config is valid YAML")
