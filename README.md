@@ -2,7 +2,7 @@
  
 ![Ghast](https://user-images.githubusercontent.com/1455979/136201893-79101b45-5ee0-486e-9e3d-db91daab0406.png)
 
- ![CI for Build and Test](https://github.com/bradcypert/ghast/actions/workflows/go.yml/badge.svg) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a944a2dfb411455293e1b6f48344e611)](https://www.codacy.com/gh/bradcypert/ghast/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bradcypert/ghast&amp;utm_campaign=Badge_Grade)
+ ![CI for Build and Test](https://github.com/bradcypert/ghast/actions/workflows/tests.yml/badge.svg) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a944a2dfb411455293e1b6f48344e611)](https://www.codacy.com/gh/bradcypert/ghast/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bradcypert/ghast&amp;utm_campaign=Badge_Grade)
 </div>
 
 Ghast is an "All in one" toolkit for building reliable Go web applications.
