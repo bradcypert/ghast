@@ -24,7 +24,7 @@ func TestControllers(t *testing.T) {
 				param = controller.QueryParam(r, "name")
 			},
 			func(actual []string) bool {
-				return "name" == actual[0]
+				return actual[0] == "name"
 			},
 			"",
 		},
