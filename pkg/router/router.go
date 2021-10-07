@@ -197,6 +197,18 @@ func (r *Router) TraceM(route string, f func(http.ResponseWriter,
 	return r.routeM(trace, route, f, middleware)
 }
 
+// Connect registers a new CONNECT route with the router
+func (r *Router) Connect(route string, f func(http.ResponseWriter,
+	*http.Request)) *Router {
+	return r.route(connect, route, f)
+}
+
+// ConnectM registers a new CONNECT route with the router and wires up the given middleware for that route only
+func (r *Router) ConnectM(route string, f func(http.ResponseWriter,
+	*http.Request), middleware []MiddlewareFunc) *Router {
+	return r.routeM(connect, route, f, middleware)
+}
+
 // DefaultServer is an optional method to help get a preconfigured server
 // with the router bound as the handler and some sensible defaults
 func (r Router) DefaultServer() *http.Server {
