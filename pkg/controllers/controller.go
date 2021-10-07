@@ -43,7 +43,7 @@ func (c GhastController) QueryParam(r *http.Request, key string) []string {
 
 // Unmarshal unmarshalls a request with a body into the provided struct
 // returns an error or nil value depending on if the unmarshall succeeded or not.
-func (c GhastController) Unmarshall(r *http.Request, s interface{}) error {
+func (c GhastController) Unmarshal(r *http.Request, s interface{}) error {
 	body := r.Body
 
 	payload, err := ioutil.ReadAll(body)

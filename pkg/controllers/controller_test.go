@@ -70,7 +70,7 @@ func TestControllerUnmarshalling(t *testing.T) {
 		Name string
 		Age  int
 	}
-	controller.Unmarshall(req, &user)
+	controller.Unmarshal(req, &user)
 	if user.Name != "Brad" {
 		t.Errorf("Got: \"%s\"; expected value: \"Brad\"", user.Name)
 	}
