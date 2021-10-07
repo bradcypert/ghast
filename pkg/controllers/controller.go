@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/CloudyKit/jet"
@@ -39,6 +41,20 @@ func (c GhastController) QueryParam(r *http.Request, key string) []string {
 	return r.URL.Query()[key]
 }
 
+// Unmarshal unmarshalls a request with a body into the provided struct
+// returns an error or nil value depending on if the unmarshall succeeded or not.
+func (c GhastController) Unmarshal(r *http.Request, s interface{}) error {
+	body := r.Body
+
+	payload, err := ioutil.ReadAll(body)
+
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(payload, s)
+}
+
 // View executes a view from the app templates
 func (c GhastController) View(name string, w http.ResponseWriter, vars jet.VarMap, contextualData interface{}) {
 	tmpl, err := ghastApp.GetApp(c.Container()).GetViewSet().GetTemplate(name)
@@ -49,5 +65,4 @@ func (c GhastController) View(name string, w http.ResponseWriter, vars jet.VarMa
 	if err = tmpl.Execute(w, vars, contextualData); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	return
 }
