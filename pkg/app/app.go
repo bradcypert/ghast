@@ -87,13 +87,13 @@ func NewAppWithConfig(debugOptions DebugOptions) App {
 
 // GetApp gets the app instance out of a given container
 func GetApp(c *ghastContainer.Container) App {
-	return c.Make("ghast/app").(App)
+	return c.Make(ghastContainer.AppKey).(App)
 }
 
 // Start boots up the HTTP server and binds a route listener
 func (a App) Start() {
-	router, routerOK := a.c.Make("ghast/router").(ghastRouter.Router)
-	if routerOK != true {
+	router, routerOK := a.c.Make(ghastContainer.RouterKey).(ghastRouter.Router)
+	if !routerOK {
 		log.Panic("Router was not bound to DI container. Did you call SetRouter on your app?")
 	}
 
@@ -107,7 +107,7 @@ func (a App) Start() {
 
 	// but always overwrite the handler to use the ghast router
 	s.Handler = router
-	s.Addr = ":" + a.c.Make("@ghast.config.port").(string)
+	s.Addr = ":" + a.c.Make(ghastContainer.PortKey).(string)
 
 	// Bind the app to the container so its available
 	a.c.Bind("ghast/app", func(c *ghastContainer.Container) interface{} {
