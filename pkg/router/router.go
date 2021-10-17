@@ -6,6 +6,7 @@ import (
 	"time"
 
 	ghastContainer "github.com/bradcypert/ghast/pkg/container"
+	ghastControllers "github.com/bradcypert/ghast/pkg/controllers"
 	pathToRegexp "github.com/soongo/path-to-regexp"
 )
 
@@ -207,6 +208,24 @@ func (r *Router) Connect(route string, f func(http.ResponseWriter,
 func (r *Router) ConnectM(route string, f func(http.ResponseWriter,
 	*http.Request), middleware []MiddlewareFunc) *Router {
 	return r.routeM(connect, route, f, middleware)
+}
+
+// Resource takes in a Controller Resource and generates Index, Get, Create, Delete
+// and Update routes for that resource.
+// Prefix is a string for any scoping or namespacing for the resource
+// For example, you can pass "/v1/" as a Prefix for a Resource where
+// getName returns "user" which would create the following routes:
+// GET     /v1/user
+// GET     /v1/user/:id
+// POST    /v1/user
+// DELETE  /v1/user/:id
+// UPDATE /v1/user/:id
+func (r *Router) Resource(prefix string, resource ghastControllers.Resource) {
+	r.Get(prefix+resource.GetName(), resource.Index)
+	r.Get(prefix+resource.GetName()+"/:id", resource.Get)
+	r.Post(prefix+resource.GetName(), resource.Create)
+	r.Delete(prefix+resource.GetName()+"/:id", resource.Delete)
+	r.Put(prefix+resource.GetName()+"/:id", resource.Update)
 }
 
 // DefaultServer is an optional method to help get a preconfigured server

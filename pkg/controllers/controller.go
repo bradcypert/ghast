@@ -10,6 +10,15 @@ import (
 	ghastContainer "github.com/bradcypert/ghast/pkg/container"
 )
 
+type Resource interface {
+	GetName() string
+	Index(w http.ResponseWriter, r *http.Request)
+	Get(w http.ResponseWriter, r *http.Request)
+	Create(w http.ResponseWriter, r *http.Request)
+	Update(w http.ResponseWriter, r *http.Request)
+	Delete(w http.ResponseWriter, r *http.Request)
+}
+
 // GhastController should be embedded into consumer controllers
 // and provides helper functions for working with the responseWriter, etc.
 type GhastController struct{}
