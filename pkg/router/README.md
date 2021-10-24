@@ -75,3 +75,17 @@ router.GetM("/:name", func(w http.ResponseWriter, r *http.Request) {
     fmt.Fprint(w, "Hello "+r.Context().Value("name").(string))
 }, middleware)
 ```
+
+### Resources
+
+The GhastRouter module also exposes an interface for Resources (named `Resource`). This interface defines the expectations for a struct (usually a controller) that successfully implements a common series of request handlers. In the case of `Resource`, the struct needs to implement `Index` (intended to list all items requested), `Get` (intended to list a single item requested), `Update` (update a single item), `Delete` (delete a single item), and `Create` (create a single item).
+
+When a struct successfully implements `Resource`, you can leverage the router's `.Resource` method to generate the routes for that struct.
+
+```go
+type UserController struct {
+	/// Implement resource here
+}
+
+router.Resource("/v1/", UserController{})
+```

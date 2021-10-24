@@ -6,13 +6,6 @@ import (
 	"testing"
 )
 
-type testcase struct {
-	Name   string
-	Test   func(w http.ResponseWriter, r *http.Request)
-	Status int
-	Body   string
-}
-
 func TestPathParam(t *testing.T) {
 	t.Run("should be able to get path variables", func(t *testing.T) {
 		router := Router{}
