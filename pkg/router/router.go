@@ -123,6 +123,7 @@ func (r *Router) Post(route string, f http.HandlerFunc, middleware ...Middleware
 	return r.route(post, route, f, middleware)
 }
 
+// Put registeres a new PUT route with the router
 func (r *Router) Put(route string, f http.HandlerFunc, middleware ...MiddlewareFunc) *Router {
 	return r.route(put, route, f, middleware)
 }
