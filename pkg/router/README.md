@@ -60,17 +60,16 @@ router.AddMiddleware(middleware)
 
 ### Using Route Specific Middleware
 
-GhastRouter also supports middleware for a single route.
+GhastRouter also supports middleware for a single route. Middleware declaration is
+variadic so more middlewares can be added simply by adding them to the router.Get
+function call.
 
 ```go
-middleware := []ghastRouter.MiddlewareFunc{
-    func(rw *http.ResponseWriter, req *http.Request) {
-        fmt.Println("Incoming Request: " + req.URL.String())
-    },
-}
+middleware := func(rw *http.ResponseWriter, req *http.Request) {
+	fmt.Println("Incoming Request: " + req.URL.String())
+},
 
-// Notice the `.GetM` method? We use `GetM` instead of `Get` to allow us to add route specific middleware
-router.GetM("/:name", func(w http.ResponseWriter, r *http.Request) {
+router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusOK)
     fmt.Fprint(w, "Hello "+r.Context().Value("name").(string))
 }, middleware)
