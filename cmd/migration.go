@@ -33,10 +33,11 @@ var migrationCmd = &cobra.Command{
 		os.Mkdir(pkg, 0777)
 		f, err := os.Create(fmt.Sprintf("./%s/%s.go", pkg, name))
 		if err != nil {
-			panic("Unable to create model")
+			panic("Unable to create database migration")
 		}
 		t.Execute(f, options)
 		f.Close()
+		fmt.Printf("created new database migration: ./%s/%s.go\n", pkg, name)
 	},
 }
 
