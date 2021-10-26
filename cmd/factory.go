@@ -43,6 +43,7 @@ var factoryCmd = &cobra.Command{
 		}
 		t.Execute(f, options)
 		f.Close()
+		fmt.Printf("created new factory: ./%s/%s.go\n", pkg, name)
 	},
 }
 

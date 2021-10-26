@@ -42,6 +42,7 @@ and are delegated to by your router.`,
 		}
 		t.Execute(f, options)
 		f.Close()
+		fmt.Printf("created new controller: ./%s/%s.go\n", pkg, name)
 	},
 }
 
