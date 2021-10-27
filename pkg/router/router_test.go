@@ -25,6 +25,29 @@ func TestPathParam(t *testing.T) {
 	})
 }
 
+func TestNestingRouters(t *testing.T) {
+	t.Run("should be able to nest routers", func(t *testing.T) {
+		router := Router{}
+		subrouter := Router{}
+
+		var name string
+
+		subrouter.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
+			name = router.PathParam(r, "name").(string)
+		})
+
+		router.Base("/v1").Merge(&subrouter)
+
+		server := router.DefaultServer()
+		req := httptest.NewRequest(http.MethodGet, "/v1/foo", nil)
+		resp := httptest.NewRecorder()
+		server.Handler.ServeHTTP(resp, req)
+		if name != "foo" {
+			t.Error("Failed to set name via context params")
+		}
+	})
+}
+
 func TestResponses(t *testing.T) {
 
 	t.Run("should handle GETs correctly", func(t *testing.T) {
