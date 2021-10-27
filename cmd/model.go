@@ -41,6 +41,7 @@ var modelCmd = &cobra.Command{
 		}
 		t.Execute(f, options)
 		f.Close()
+		fmt.Printf("created new model: ./%s/%s.go\n", pkg, name)
 	},
 }
 

@@ -114,93 +114,48 @@ func (r *Router) QueryParam(req *http.Request, key string) interface{} {
 }
 
 // Get registers a new GET route with the router
-func (r *Router) Get(route string, f http.HandlerFunc) *Router {
-	return r.route(get, route, f)
-}
-
-// GetM registers a new GET route with the router and wires up the given middleware for that route only
-func (r *Router) GetM(route string, f http.HandlerFunc, middleware []MiddlewareFunc) *Router {
-	return r.routeM(get, route, f, middleware)
+func (r *Router) Get(route string, f http.HandlerFunc, middleware ...MiddlewareFunc) *Router {
+	return r.route(get, route, f, middleware)
 }
 
 // Post registers a new POST route with the router
-func (r *Router) Post(route string, f http.HandlerFunc) *Router {
-	return r.route(post, route, f)
+func (r *Router) Post(route string, f http.HandlerFunc, middleware ...MiddlewareFunc) *Router {
+	return r.route(post, route, f, middleware)
 }
 
-// PostM registers a new POST route with the router and wires up the given middleware for that route only
-func (r *Router) PostM(route string, f http.HandlerFunc, middleware []MiddlewareFunc) *Router {
-	return r.routeM(post, route, f, middleware)
-}
-
-// Put registers a new PUT route with the router
-func (r *Router) Put(route string, f http.HandlerFunc) *Router {
-	return r.route(put, route, f)
-}
-
-// PutM registers a new PUT route with the router and wires up the given middleware for that route only
-func (r *Router) PutM(route string, f http.HandlerFunc, middleware []MiddlewareFunc) *Router {
-	return r.routeM(put, route, f, middleware)
+// Put registeres a new PUT route with the router
+func (r *Router) Put(route string, f http.HandlerFunc, middleware ...MiddlewareFunc) *Router {
+	return r.route(put, route, f, middleware)
 }
 
 // Patch registers a new PATCH route with the router
-func (r *Router) Patch(route string, f http.HandlerFunc) *Router {
-	return r.route(patch, route, f)
-}
-
-// PatchM registers a new PATCH route with the router and wires up the given middleware for that route only
-func (r *Router) PatchM(route string, f http.HandlerFunc, middleware []MiddlewareFunc) *Router {
-	return r.routeM(patch, route, f, middleware)
+func (r *Router) Patch(route string, f http.HandlerFunc, middleware ...MiddlewareFunc) *Router {
+	return r.route(patch, route, f, middleware)
 }
 
 // Delete registers a new DELETE route with the router
-func (r *Router) Delete(route string, f http.HandlerFunc) *Router {
-	return r.route(delete, route, f)
-}
-
-// DeleteM registers a new DELETE route with the router and wires up the given middleware for that route only
-func (r *Router) DeleteM(route string, f http.HandlerFunc, middleware []MiddlewareFunc) *Router {
-	return r.routeM(delete, route, f, middleware)
+func (r *Router) Delete(route string, f http.HandlerFunc, middleware ...MiddlewareFunc) *Router {
+	return r.route(delete, route, f, middleware)
 }
 
 // Options registers a new OPTIONS route with the router
-func (r *Router) Options(route string, f http.HandlerFunc) *Router {
-	return r.route(options, route, f)
-}
-
-// OptionsM registers a new OPTIONS route with the router and wires up the given middleware for that route only
-func (r *Router) OptionsM(route string, f http.HandlerFunc, middleware []MiddlewareFunc) *Router {
-	return r.routeM(options, route, f, middleware)
+func (r *Router) Options(route string, f http.HandlerFunc, middleware ...MiddlewareFunc) *Router {
+	return r.route(options, route, f, middleware)
 }
 
 // Head registers a new HEAD route with the router
-func (r *Router) Head(route string, f http.HandlerFunc) *Router {
-	return r.route(head, route, f)
-}
-
-// HeadM registers a new HEAD route with the router and wires up the given middleware for that route only
-func (r *Router) HeadM(route string, f http.HandlerFunc, middleware []MiddlewareFunc) *Router {
-	return r.routeM(head, route, f, middleware)
+func (r *Router) Head(route string, f http.HandlerFunc, middleware ...MiddlewareFunc) *Router {
+	return r.route(head, route, f, middleware)
 }
 
 // Trace registers a new TRACE route with the router
-func (r *Router) Trace(route string, f http.HandlerFunc) *Router {
-	return r.route(trace, route, f)
-}
-
-// TraceM registers a new TRACE route with the router and wires up the given middleware for that route only
-func (r *Router) TraceM(route string, f http.HandlerFunc, middleware []MiddlewareFunc) *Router {
-	return r.routeM(trace, route, f, middleware)
+func (r *Router) Trace(route string, f http.HandlerFunc, middleware ...MiddlewareFunc) *Router {
+	return r.route(trace, route, f, middleware)
 }
 
 // Connect registers a new CONNECT route with the router
-func (r *Router) Connect(route string, f http.HandlerFunc) *Router {
-	return r.route(connect, route, f)
-}
-
-// ConnectM registers a new CONNECT route with the router and wires up the given middleware for that route only
-func (r *Router) ConnectM(route string, f http.HandlerFunc, middleware []MiddlewareFunc) *Router {
-	return r.routeM(connect, route, f, middleware)
+func (r *Router) Connect(route string, f http.HandlerFunc, middleware ...MiddlewareFunc) *Router {
+	return r.route(connect, route, f, middleware)
 }
 
 // Resource takes in a Controller Resource and generates Index, Get, Create, Delete
@@ -233,13 +188,7 @@ func (r Router) DefaultServer() *http.Server {
 	}
 }
 
-// Format the route binding
-func (r *Router) route(method string, route string, f http.HandlerFunc) *Router {
-	r.binding = append(r.binding, Binding{match: route, handler: f, method: method})
-	return r
-}
-
-func (r *Router) routeM(method string, route string, f http.HandlerFunc, middleware []MiddlewareFunc) *Router {
+func (r *Router) route(method string, route string, f http.HandlerFunc, middleware []MiddlewareFunc) *Router {
 	r.binding = append(r.binding, Binding{match: route, handler: f, middlewares: middleware, method: method})
 	return r
 }
