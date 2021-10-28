@@ -88,3 +88,22 @@ type UserController struct {
 
 router.Resource("/v1/", UserController{})
 ```
+
+### Merging Multiple Routers
+
+Ghast can also merge multiple routers together. This is a pattern that you may use if you need to apply a certain prefix or middleware to a group of routes, but not all of them.
+
+```go
+router := Router{}
+subrouter := Router{}
+
+var name string
+
+subrouter.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
+	name = router.PathParam(r, "name").(string)
+})
+
+router.Base("/v1").Merge(&subrouter)
+
+// this gives you a GET route at /v1/:name that responds with the handler func declared above.
+```
