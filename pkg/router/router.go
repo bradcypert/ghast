@@ -54,7 +54,7 @@ func (r *Router) Merge(routers ...*Router) *Router {
 			binding.match = router.path + binding.match
 
 			// merge router specific middlewares into route specific middlewares
-			binding.middlewares = append(binding.middlewares, r.middlewares...)
+			binding.middlewares = append(binding.middlewares, router.middlewares...)
 
 			// append full binding the base router
 			r.binding = append(r.binding, binding)
