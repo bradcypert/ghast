@@ -9,20 +9,26 @@ import (
 	"github.com/bradcypert/ghast/pkg/router"
 )
 
+type MiddlewareKey int
+
+const (
+	KEY MiddlewareKey = iota
+)
+
 func TestContextPassing(t *testing.T) {
 	t.Run("should be able to get path variables", func(t *testing.T) {
 		router := router.Router{}
 		var contextVal string
 
 		router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
-			contextVal = r.Context().Value("FOO").(string)
+			contextVal = r.Context().Value(KEY).(string)
 		})
 
 		router.AddMiddleware([]func(next http.Handler) http.Handler{
 			func(next http.Handler) http.Handler {
 				return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 					curContext := req.Context()
-					req = req.Clone(context.WithValue(curContext, "FOO", "BAR"))
+					req = req.Clone(context.WithValue(curContext, KEY, "BAR"))
 
 					next.ServeHTTP(w, req)
 				})
