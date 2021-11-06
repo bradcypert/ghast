@@ -21,12 +21,20 @@ const (
 	trace   string = "TRACE"
 )
 
-// MiddlewareFunc is a functional alias to signify the signature of a middleware anonymous function.
-type MiddlewareFunc = func(*http.ResponseWriter, *http.Request)
+// MiddlewareFunc type alias for a function that takes in a http.Handler and returns an HTTP Handler
+//	func(next http.Handler) http.Handler {
+//		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+//			curContext := req.Context()
+//			req = req.Clone(context.WithValue(curContext, KEY, "BAR"))
+//
+//			next.ServeHTTP(w, req)
+//		})
+//  }
+type MiddlewareFunc = func(next http.Handler) http.Handler
 
 // Binding maps a url pattern to an HTTP handler
 type Binding struct {
-	handler     func(http.ResponseWriter, *http.Request)
+	handler     http.Handler
 	match       string
 	method      string
 	middlewares []MiddlewareFunc
@@ -89,16 +97,6 @@ func (r Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 			if match != nil {
 
-				// Run global middlewares
-				for _, m := range r.middlewares {
-					m(&rw, req)
-				}
-
-				// Run route specific middlewares
-				for _, m := range binding.middlewares {
-					m(&rw, req)
-				}
-
 				ctx := req.Context()
 				for _, g := range match.Groups() {
 					if len(tokens) >= match.Index && len(tokens) > 0 {
@@ -108,8 +106,18 @@ func (r Router) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 					}
 				}
 
-				r := req.WithContext(ctx)
-				binding.handler(rw, r)
+				req := req.Clone(ctx)
+
+				allMiddlewares := append([]MiddlewareFunc{}, binding.middlewares...)
+				allMiddlewares = append(allMiddlewares, r.middlewares...)
+
+				handler := binding.handler
+
+				for _, m := range allMiddlewares {
+					handler = m(handler)
+				}
+
+				handler.ServeHTTP(rw, req)
 				break
 			}
 		}
