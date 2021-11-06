@@ -21,7 +21,15 @@ const (
 	trace   string = "TRACE"
 )
 
-// MiddlewareFunc is a functional alias to signify the signature of a middleware anonymous function.
+// MiddlewareFunc type alias for a function that takes in a http.Handler and returns an HTTP Handler
+//	func(next http.Handler) http.Handler {
+//		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+//			curContext := req.Context()
+//			req = req.Clone(context.WithValue(curContext, KEY, "BAR"))
+//
+//			next.ServeHTTP(w, req)
+//		})
+//  }
 type MiddlewareFunc = func(next http.Handler) http.Handler
 
 // Binding maps a url pattern to an HTTP handler
