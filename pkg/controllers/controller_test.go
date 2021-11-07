@@ -106,7 +106,7 @@ func TestRouterWorksWithControllers(t *testing.T) {
 		resp := httptest.NewRecorder()
 		server.Handler.ServeHTTP(resp, req)
 		if resp.Body.String() != "hello world" {
-			t.Error("Failed to set name via context params, got {}", resp.Body)
+			t.Error("Failed to set name via context params, got ", resp.Body)
 		}
 	})
 
