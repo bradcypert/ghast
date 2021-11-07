@@ -14,7 +14,9 @@ type Response struct {
 	Length  int
 }
 
-// RouteFunc
+// RouteFunc a type alias for controller actions
+// Controllers only hvae the request exposed to them as
+// the response writer is handled by the Ghast framework.
 type RouteFunc func(req *http.Request) (Response, error)
 
 // ServeHTTP calls f(w, r).
