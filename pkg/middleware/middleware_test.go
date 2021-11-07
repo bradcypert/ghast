@@ -20,9 +20,9 @@ func TestContextPassing(t *testing.T) {
 		router := router.Router{}
 		var contextVal string
 
-		router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
+		router.Get("/:name", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			contextVal = r.Context().Value(KEY).(string)
-		})
+		}))
 
 		router.AddMiddleware([]func(next http.Handler) http.Handler{
 			func(next http.Handler) http.Handler {

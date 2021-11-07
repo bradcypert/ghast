@@ -11,9 +11,9 @@ func TestPathParam(t *testing.T) {
 		router := Router{}
 		var name string
 
-		router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
+		router.Get("/:name", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			name = router.PathParam(r, "name").(string)
-		})
+		}))
 
 		server := router.DefaultServer()
 		req := httptest.NewRequest(http.MethodGet, "/foo", nil)
@@ -32,9 +32,11 @@ func TestNestingRouters(t *testing.T) {
 
 		var name string
 
-		subrouter.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
-			name = router.PathParam(r, "name").(string)
-		})
+		subrouter.Get("/:name", http.HandlerFunc(
+			func(w http.ResponseWriter, r *http.Request) {
+				name = router.PathParam(r, "name").(string)
+			},
+		))
 
 		router.Base("/v1").Merge(&subrouter)
 
@@ -53,10 +55,12 @@ func TestResponses(t *testing.T) {
 	t.Run("should handle GETs correctly", func(t *testing.T) {
 		router := Router{}
 
-		router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusTeapot)
-			w.Write([]byte("hello"))
-		})
+		router.Get("/:name", http.HandlerFunc(
+			func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusTeapot)
+				w.Write([]byte("hello"))
+			},
+		))
 
 		server := router.DefaultServer()
 		req := httptest.NewRequest(http.MethodGet, "/foo", nil)
@@ -71,9 +75,9 @@ func TestResponses(t *testing.T) {
 		router := Router{}
 		var name string
 
-		router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
+		router.Get("/:name", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			name = r.Context().Value("name").(string)
-		})
+		}))
 
 		server := router.DefaultServer()
 		req := httptest.NewRequest(http.MethodGet, "/foo", nil)

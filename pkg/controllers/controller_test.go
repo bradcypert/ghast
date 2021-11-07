@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/bradcypert/ghast/pkg/router"
 )
 
 func TestControllers(t *testing.T) {
@@ -78,4 +80,34 @@ func TestControllerUnmarshalling(t *testing.T) {
 	if user.Age != 28 {
 		t.Errorf("Got: \"%d\"; expected value: 28", user.Age)
 	}
+}
+
+type MockController struct {
+	GhastController
+}
+
+func (m MockController) Get(req *http.Request) (Response, error) {
+	return Response{
+		Body: "hello world",
+	}, nil
+}
+
+func TestRouterWorksWithControllers(t *testing.T) {
+
+	t.Run("should handle controller response functions properly", func(t *testing.T) {
+		router := router.Router{}
+
+		controller := MockController{}
+
+		router.Get("/:name", RouteFunc(controller.Get))
+
+		server := router.DefaultServer()
+		req := httptest.NewRequest(http.MethodGet, "/foo", nil)
+		resp := httptest.NewRecorder()
+		server.Handler.ServeHTTP(resp, req)
+		if resp.Body.String() != "hello world" {
+			t.Error("Failed to set name via context params, got {}", resp.Body)
+		}
+	})
+
 }
