@@ -37,6 +37,11 @@ func (rf RouteFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// NEED TO FIGURE OUT HOW TO ADD HEADERS HERE
 	if response.Body != nil {
 		switch response.Body.(type) {
+		case []byte:
+			if err == nil {
+				w.WriteHeader(response.Status)
+			}
+			w.Write(response.Body.([]byte))
 		case string:
 			if err == nil {
 				w.WriteHeader(response.Status)
