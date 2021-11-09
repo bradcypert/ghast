@@ -1,4 +1,4 @@
-package controllers
+package router
 
 import (
 	"encoding/json"
@@ -15,17 +15,17 @@ type Response struct {
 }
 
 // RouteFunc a type alias for controller actions
-// Controllers only hvae the request exposed to them as
+// Controllers only have the request exposed to them as
 // the response writer is handled by the Ghast framework.
 type RouteFunc func(req *http.Request) (Response, error)
 
-// ServeHTTP calls f(w, r).
+// ServeHTTP calls f(r).
 func (rf RouteFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// any error indicates an internal server error
 	// need to make sure this is surfaced and clear in the docs
 	response, err := rf(r)
 
-	// Int's default type is 0, lets roll this up to a success
+	// Int's type default is 0, lets roll this up to a success
 	if response.Status == 0 {
 		response.Status = 200
 	}

@@ -7,9 +7,9 @@ import "net/http"
 // a single item, updating a single item, and deleting a single item
 type Resource interface {
 	GetName() string
-	Index(w http.ResponseWriter, r *http.Request)
-	Get(w http.ResponseWriter, r *http.Request)
-	Create(w http.ResponseWriter, r *http.Request)
-	Update(w http.ResponseWriter, r *http.Request)
-	Delete(w http.ResponseWriter, r *http.Request)
+	Index(req *http.Request) (Response, error)
+	Get(req *http.Request) (Response, error)
+	Create(req *http.Request) (Response, error)
+	Update(req *http.Request) (Response, error)
+	Delete(req *http.Request) (Response, error)
 }

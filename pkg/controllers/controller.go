@@ -10,6 +10,7 @@ import (
 	"github.com/CloudyKit/jet"
 	ghastApp "github.com/bradcypert/ghast/pkg/app"
 	ghastContainer "github.com/bradcypert/ghast/pkg/container"
+	"github.com/bradcypert/ghast/pkg/router"
 )
 
 // GhastController should be embedded into consumer controllers
@@ -61,10 +62,10 @@ func (c GhastController) Unmarshal(r *http.Request, s interface{}) error {
 // returns a response with the body set to the template
 // Feel free to modify the response object further before returning
 // in your controller
-func (c GhastController) View(name string, vars jet.VarMap, contextualData interface{}) (Response, error) {
+func (c GhastController) View(name string, vars jet.VarMap, contextualData interface{}) (router.Response, error) {
 	tmpl, err := ghastApp.GetApp(c.Container()).GetViewSet().GetTemplate(name)
 	if err != nil {
-		return Response{}, err
+		return router.Response{}, err
 	}
 
 	var b bytes.Buffer
@@ -72,7 +73,7 @@ func (c GhastController) View(name string, vars jet.VarMap, contextualData inter
 
 	err = tmpl.Execute(writer, vars, contextualData)
 
-	return Response{
+	return router.Response{
 		Body: b.Bytes(),
 	}, err
 }

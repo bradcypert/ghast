@@ -86,8 +86,8 @@ type MockController struct {
 	GhastController
 }
 
-func (m MockController) Get(req *http.Request) (Response, error) {
-	return Response{
+func (m MockController) Get(req *http.Request) (router.Response, error) {
+	return router.Response{
 		Body: "hello world",
 	}, nil
 }
@@ -95,13 +95,13 @@ func (m MockController) Get(req *http.Request) (Response, error) {
 func TestRouterWorksWithControllers(t *testing.T) {
 
 	t.Run("should handle controller response functions properly", func(t *testing.T) {
-		router := router.Router{}
+		r := router.Router{}
 
 		controller := MockController{}
 
-		router.Get("/:name", RouteFunc(controller.Get))
+		r.Get("/:name", router.RouteFunc(controller.Get))
 
-		server := router.DefaultServer()
+		server := r.DefaultServer()
 		req := httptest.NewRequest(http.MethodGet, "/foo", nil)
 		resp := httptest.NewRecorder()
 		server.Handler.ServeHTTP(resp, req)
