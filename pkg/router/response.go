@@ -53,8 +53,8 @@ func (rf RouteFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			}
 			w.Write([]byte(fmt.Sprint(response.Body.(int))))
 		default:
-			bytes, err := json.Marshal(response.Body)
-			if err != nil {
+			bytes, mErr := json.Marshal(response.Body)
+			if mErr != nil {
 				fmt.Println("ERR: Error when marshalling JSON passed from controller function")
 				w.WriteHeader(500)
 				w.Write(bytes)
