@@ -127,5 +127,5 @@ var demoControllerTemplate string
 //go:embed view.tmpl
 var viewTemplate string
 
-//go:embed yaml.tmpl
+//go:embed main.tmpl
 var mainTemplate string

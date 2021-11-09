@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"bufio"
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -8,6 +10,7 @@ import (
 	"github.com/CloudyKit/jet"
 	ghastApp "github.com/bradcypert/ghast/pkg/app"
 	ghastContainer "github.com/bradcypert/ghast/pkg/container"
+	"github.com/bradcypert/ghast/pkg/router"
 )
 
 // GhastController should be embedded into consumer controllers
@@ -56,13 +59,21 @@ func (c GhastController) Unmarshal(r *http.Request, s interface{}) error {
 }
 
 // View executes a view from the app templates
-func (c GhastController) View(name string, w http.ResponseWriter, vars jet.VarMap, contextualData interface{}) {
+// returns a response with the body set to the template
+// Feel free to modify the response object further before returning
+// in your controller
+func (c GhastController) View(name string, vars jet.VarMap, contextualData interface{}) (router.Response, error) {
 	tmpl, err := ghastApp.GetApp(c.Container()).GetViewSet().GetTemplate(name)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		return router.Response{}, err
 	}
 
-	if err = tmpl.Execute(w, vars, contextualData); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-	}
+	var b bytes.Buffer
+	writer := bufio.NewWriter(&b)
+
+	err = tmpl.Execute(writer, vars, contextualData)
+
+	return router.Response{
+		Body: b.Bytes(),
+	}, err
 }
