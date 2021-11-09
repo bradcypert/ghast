@@ -190,11 +190,11 @@ func (r *Router) Connect(route string, f http.Handler, middleware ...MiddlewareF
 // DELETE  /v1/user/:id
 // UPDATE /v1/user/:id
 func (r *Router) Resource(prefix string, resource Resource) {
-	// r.Get(prefix+resource.GetName(), resource.Index)
-	// r.Get(prefix+resource.GetName()+"/:id", resource.Get)
-	// r.Post(prefix+resource.GetName(), resource.Create)
-	// r.Delete(prefix+resource.GetName()+"/:id", resource.Delete)
-	// r.Put(prefix+resource.GetName()+"/:id", resource.Update)
+	r.Get(prefix+resource.GetName(), RouteFunc(resource.Index))
+	r.Get(prefix+resource.GetName()+"/:id", RouteFunc(resource.Get))
+	r.Post(prefix+resource.GetName(), RouteFunc(resource.Create))
+	r.Delete(prefix+resource.GetName()+"/:id", RouteFunc(resource.Delete))
+	r.Put(prefix+resource.GetName()+"/:id", RouteFunc(resource.Update))
 }
 
 // DefaultServer is an optional method to help get a preconfigured server

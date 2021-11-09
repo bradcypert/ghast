@@ -3,6 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -86,10 +87,38 @@ type MockController struct {
 	GhastController
 }
 
+func (m MockController) Index(req *http.Request) (router.Response, error) {
+	return router.Response{
+		Body: "hello world",
+	}, nil
+}
+
 func (m MockController) Get(req *http.Request) (router.Response, error) {
 	return router.Response{
 		Body: "hello world",
 	}, nil
+}
+
+func (m MockController) Create(req *http.Request) (router.Response, error) {
+	return router.Response{
+		Body: "hello world",
+	}, nil
+}
+
+func (m MockController) Update(req *http.Request) (router.Response, error) {
+	return router.Response{
+		Body: "hello world",
+	}, nil
+}
+
+func (m MockController) Delete(req *http.Request) (router.Response, error) {
+	return router.Response{
+		Body: "hello world",
+	}, nil
+}
+
+func (m MockController) GetName() string {
+	return "mock"
 }
 
 func TestRouterWorksWithControllers(t *testing.T) {
@@ -109,5 +138,23 @@ func TestRouterWorksWithControllers(t *testing.T) {
 			t.Error("Failed to set name via context params, got ", resp.Body)
 		}
 	})
+}
 
+func TestResources(t *testing.T) {
+	t.Run("Resources should work", func(t *testing.T) {
+		r := router.Router{}
+
+		controller := MockController{}
+
+		r.Resource("/", controller)
+
+		server := r.DefaultServer()
+		req := httptest.NewRequest(http.MethodGet, "/mock", nil)
+		resp := httptest.NewRecorder()
+		server.Handler.ServeHTTP(resp, req)
+		fmt.Println(resp.Body.String())
+		if resp.Body.String() != "hello world" {
+			t.Error("Failed to set name via context params, got ", resp.Body)
+		}
+	})
 }
