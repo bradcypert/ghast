@@ -5,23 +5,23 @@ import (
     "net/http"
 
     ghastApp "github.com/bradcypert/ghast/pkg/app"
-    ghastRouter "github.com/bradcypert/ghast/pkg/router"
+    "github.com/bradcypert/ghast/pkg/router"
     "{{.Pkg}}/controllers"
 )
 
 func main() {
-    router := ghastRouter.Router{}
+    r := router.Router{}
 
-    // We can use controllers. Generate more using "ghast make controller MyControllerName" from your terminal
-    router.Get("/", controllers.HomeController{}.Index)
+	// We can use controllers. Generate more using "ghast make controller MyControllerName" from your terminal
+	r.Get("/", router.RouteFunc(controllers.HomeController{}.Index))
 
-    // Or we can just use standard Go HTTP handler funcs
-    router.Get("/:name", func(w http.ResponseWriter, r *http.Request) {
-        w.WriteHeader(http.StatusOK)
-        fmt.Fprint(w, "Hello "+r.Context().Value("name").(string))
-    })
+	// Or we can just use standard Go HTTP handler funcs
+	r.Get("/:name", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, "Hello "+r.Context().Value("name").(string))
+	}))
 
-    app := ghastApp.NewApp()
-    app.SetRouter(router)
-    app.Start()
+	app := ghastApp.NewApp()
+	app.SetRouter(r)
+	app.Start()
 }

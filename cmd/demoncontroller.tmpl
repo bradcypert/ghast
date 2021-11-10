@@ -3,16 +3,16 @@ package controllers
 import (
     "net/http"
     "github.com/CloudyKit/jet"
-    ghastController "github.com/bradcypert/ghast/pkg/controllers"
+    "github.com/bradcypert/ghast/pkg/controllers"
 )
 
 type HomeController struct {
-    ghastController.GhastController
+    controller.GhastController
 }
 
-func (c HomeController) Index(w http.ResponseWriter, r *http.Request) {
-    vars := make(jet.VarMap)
-    appName := c.Config("@app.config.appName").(string)
-    vars.Set("AppName", appName)
-    c.View("template.jet", w, vars, nil)
+func (c HomeController) Index(r *http.Request) (router.Response, error) {
+	vars := make(jet.VarMap)
+	appName := c.Config("@app.config.appName").(string)
+	vars.Set("AppName", appName)
+	return c.View("template.jet", vars, nil)
 }

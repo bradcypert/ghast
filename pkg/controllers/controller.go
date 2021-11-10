@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
@@ -69,9 +68,8 @@ func (c GhastController) View(name string, vars jet.VarMap, contextualData inter
 	}
 
 	var b bytes.Buffer
-	writer := bufio.NewWriter(&b)
 
-	err = tmpl.Execute(writer, vars, contextualData)
+	err = tmpl.Execute(&b, vars, contextualData)
 
 	return router.Response{
 		Body: b.Bytes(),
