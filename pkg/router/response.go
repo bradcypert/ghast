@@ -34,7 +34,12 @@ func (rf RouteFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(500)
 	}
 
-	// NEED TO FIGURE OUT HOW TO ADD HEADERS HERE
+	for k, v := range response.Headers {
+		for _, vals := range v {
+			w.Header().Add(k, vals)
+		}
+	}
+
 	if response.Body != nil {
 		switch response.Body.(type) {
 		case []byte:
@@ -60,6 +65,7 @@ func (rf RouteFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				w.Write(bytes)
 			} else {
 				if err == nil {
+					w.Header().Set("Content-Type", "application/json")
 					w.WriteHeader(response.Status)
 				}
 				w.Write(bytes)
