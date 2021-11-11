@@ -6,6 +6,7 @@ import (
 	"github.com/bradcypert/ghast/pkg/router"
 )
 
+// CorsConfig struct for configuring CORS via the Cors middleware
 type CorsConfig struct {
 	AccessControlAllowOrigin  []string
 	AccessControlAllowMethods []string
