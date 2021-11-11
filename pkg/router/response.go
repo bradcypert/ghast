@@ -25,14 +25,8 @@ func (rf RouteFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// need to make sure this is surfaced and clear in the docs
 	response, err := rf(r)
 
-	// Int's type default is 0, lets roll this up to a success
-	if response.Status == 0 {
-		response.Status = 200
-	}
-
-	if err != nil {
-		w.WriteHeader(500)
-	}
+	var status int
+	var body []byte
 
 	for k, v := range response.Headers {
 		for _, vals := range v {
@@ -44,32 +38,44 @@ func (rf RouteFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		switch response.Body.(type) {
 		case []byte:
 			if err == nil {
-				w.WriteHeader(response.Status)
+				status = response.Status
 			}
-			w.Write(response.Body.([]byte))
+			body = response.Body.([]byte)
 		case string:
 			if err == nil {
-				w.WriteHeader(response.Status)
+				status = response.Status
 			}
-			w.Write([]byte(response.Body.(string)))
+			body = []byte(response.Body.(string))
 		case int:
 			if err == nil {
-				w.WriteHeader(response.Status)
+				status = response.Status
 			}
-			w.Write([]byte(fmt.Sprint(response.Body.(int))))
+			body = []byte(fmt.Sprint(response.Body.(int)))
 		default:
 			bytes, mErr := json.Marshal(response.Body)
 			if mErr != nil {
 				fmt.Println("ERR: Error when marshalling JSON passed from controller function")
-				w.WriteHeader(500)
-				w.Write(bytes)
+				status = 500
+				body = bytes
 			} else {
 				if err == nil {
 					w.Header().Set("Content-Type", "application/json")
-					w.WriteHeader(response.Status)
+					status = response.Status
 				}
-				w.Write(bytes)
+				body = bytes
 			}
 		}
 	}
+
+	if err != nil {
+		status = 500
+	}
+
+	// Int's type default is 0, lets roll this up to a success
+	if status == 0 {
+		status = 200
+	}
+
+	w.WriteHeader(status)
+	w.Write(body)
 }
