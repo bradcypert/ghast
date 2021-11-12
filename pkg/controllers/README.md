@@ -4,7 +4,9 @@ Ghast's Controllers are extremely easy to use and provide a few minor-abstractio
 
 To use a GhastController, you can either run `ghast make controller MyControllerNameHere` or create your own controller and embed the `GhastController` struct into it.
 
-Ghast's controllers give you access to a few convenient reciever functions on the controller instance. For each of the common HTTP status codes, there are helper functions that can be leveraged. For example, using `Success` will set the status code to success and write out whatever you pass as the 2nd argument. If the 2nd argument is a struct, Ghast will go ahead and marshall that, set the relevant content-type header to application/json, and then write that to the responseWriter.
+Ghast's controllers are a little different than the standard http.handlers that the router supports (although technically a controller can use those too!). These controllers are intended to be used with a signature like so: `func (c *TestController) Index(r *http.Request) (router.Response, error)`, however, binding these to a router requires a special step.
+
+Namely, controllers that are built this way need to have their receiver functions passed to the router.RouteFunc to add support for the serveHTTP method thats necessary for our router (essentially making these conform to http.Handler from the standard library).
 
 A simple example of a controller can be seen here:
 
@@ -14,20 +16,23 @@ package controllers
 import (
 	"net/http"
 
-	ghastController "github.com/bradcypert/ghast/pkg/controllers"
+	"github.com/bradcypert/ghast/pkg/controllers"
+	"github.com/bradcypert/ghast/pkg/router"
 )
 
 type TestController struct {
-	ghastController.GhastController
+	controllers.GhastController
 }
 
 type Thing struct {
 	Foo string
 }
 
-func (c *TestController) Index(w http.ResponseWriter, r *http.Request) {
+func (c *TestController) Index(r *http.Request) (router.Response, error) {
 	myStruct := Thing{Foo: "bar"}
-	c.Success(w, myStruct)
+	return router.Response{
+		Body: myStruct
+	}, nil
 }
 ```
 
@@ -39,11 +44,11 @@ package controllers
 import (
 	"net/http"
 
-	ghastController "github.com/bradcypert/ghast/pkg/controllers"
+	"github.com/bradcypert/ghast/pkg/controllers"
 )
 
 type TestController struct {
-	ghastController.GhastController
+	controllers.GhastController
 }
 
 func (c *TestController) Index(w http.ResponseWriter, r *http.Request) {

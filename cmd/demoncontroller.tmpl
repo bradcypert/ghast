@@ -4,10 +4,11 @@ import (
     "net/http"
     "github.com/CloudyKit/jet"
     "github.com/bradcypert/ghast/pkg/controllers"
+    "github.com/bradcypert/ghast/pkg/router"
 )
 
 type HomeController struct {
-    controller.GhastController
+    controllers.GhastController
 }
 
 func (c HomeController) Index(r *http.Request) (router.Response, error) {

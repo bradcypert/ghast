@@ -3,7 +3,6 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -117,6 +116,18 @@ func (m MockController) Delete(req *http.Request) (router.Response, error) {
 	}, nil
 }
 
+type MockResp struct {
+	User string
+}
+
+func (m MockController) Struct(req *http.Request) (router.Response, error) {
+	return router.Response{
+		Body: MockResp{
+			User: "Brad",
+		},
+	}, nil
+}
+
 func (m MockController) GetName() string {
 	return "mock"
 }
@@ -138,6 +149,26 @@ func TestRouterWorksWithControllers(t *testing.T) {
 			t.Error("Failed to set name via context params, got ", resp.Body)
 		}
 	})
+
+	t.Run("passing a struct should marshall body and set content type", func(t *testing.T) {
+		r := router.Router{}
+
+		controller := MockController{}
+
+		r.Get("/:name", router.RouteFunc(controller.Struct))
+
+		server := r.DefaultServer()
+		req := httptest.NewRequest(http.MethodGet, "/foo", nil)
+		resp := httptest.NewRecorder()
+		server.Handler.ServeHTTP(resp, req)
+		if resp.Body.String() != "{\"User\":\"Brad\"}" {
+			t.Error("Failed to set name via marshalling, got ", resp.Body)
+		}
+
+		if resp.Result().Header["Content-Type"][0] != "application/json" {
+			t.Error("Failed to set content type, got  ", resp.Result().Header["Content-Type"][0])
+		}
+	})
 }
 
 func TestResources(t *testing.T) {
@@ -152,7 +183,9 @@ func TestResources(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/mock", nil)
 		resp := httptest.NewRecorder()
 		server.Handler.ServeHTTP(resp, req)
-		fmt.Println(resp.Body.String())
+		if resp.Result().StatusCode != 200 {
+			t.Error("Failed to set status code properly ", resp.Result().StatusCode)
+		}
 		if resp.Body.String() != "hello world" {
 			t.Error("Failed to set name via context params, got ", resp.Body)
 		}

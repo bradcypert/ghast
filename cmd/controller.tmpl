@@ -3,32 +3,45 @@ package {{.Package}}
 import (
     "net/http"
     "github.com/bradcypert/ghast/pkg/controllers"
+    "github.com/bradcypert/ghast/pkg/router"
 )
 
 type {{.Name}} struct {
-    controller.GhastController
+    controllers.GhastController
 }
 
-func (c {{.Name}}) Index(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
+func (c {{.Name}}) Index(r *http.Request) (router.Response, error) {
+    return router.Response{
+        Status: 404,
+    }, nil
 }
 
-func (c {{.Name}}) Get(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
+func (c {{.Name}}) Get(r *http.Request) (router.Response, error) {
+    return router.Response{
+        Status: 404,
+    }, nil
 }
 
-func (c {{.Name}}) Create(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
+func (c {{.Name}}) Create(r *http.Request) (router.Response, error) {
+    return router.Response{
+        Status: 404,
+    }, nil
 }
 
-func (c {{.Name}}) Edit(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
+func (c {{.Name}}) Edit(r *http.Request) (router.Response, error) {
+    return router.Response{
+        Status: 404,
+    }, nil
 }
 
-func (c {{.Name}}) Update(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
+func (c {{.Name}}) Update(r *http.Request) (router.Response, error) {
+    return router.Response{
+        Status: 404,
+    }, nil
 }
 
-func (c {{.Name}}) Delete(w http.ResponseWriter, r *http.Request) {
-    c.NotFound(w, "")
+func (c {{.Name}}) Delete(r *http.Request) (router.Response, error) {
+    return router.Response{
+        Status: 404,
+    }, nil
 }
