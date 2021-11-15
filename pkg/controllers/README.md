@@ -51,9 +51,11 @@ type TestController struct {
 	controllers.GhastController
 }
 
-func (c *TestController) Index(w http.ResponseWriter, r *http.Request) {
+func (c *TestController) Index(r *http.Request) (router.Response, error) {
 	// get user ID from path, /user/:user
 	userId := c.PathParam("user").(string)
+	
+	// ...
 }
 ```
 
